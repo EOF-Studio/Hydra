@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import com.eofstudio.hydra.core.Standard.HydraManager;
-import com.eofstudio.hydra.core.Standard.SocketListener;
 import com.eofstudio.hydra.core.IHydraManager;
-import com.eofstudio.hydra.core.ISocketListener;
-
 import junit.framework.TestCase;
 
 public class HydraManagerTest extends TestCase
