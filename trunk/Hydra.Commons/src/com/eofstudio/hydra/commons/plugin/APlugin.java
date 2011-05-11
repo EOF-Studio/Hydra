@@ -20,9 +20,8 @@ public abstract class APlugin implements IPlugin
 	}
 
 	@Override
-	public void AddConnection( Socket socket ) 
+	public void addConnection( Socket socket ) 
 	{
 		_ActiveConnections.add( socket );
 	}
-
 }

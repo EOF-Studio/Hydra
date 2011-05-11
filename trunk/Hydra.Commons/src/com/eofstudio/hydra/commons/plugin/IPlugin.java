@@ -2,8 +2,9 @@ package com.eofstudio.hydra.commons.plugin;
 
 import java.net.Socket;
 
-public interface IPlugin 
+public interface IPlugin extends Runnable
 {
+	int getPluginID();
 	int getInstanceID();
-	void AddConnection( Socket socket );
+	void addConnection( Socket socket );
 }

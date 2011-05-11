@@ -1,8 +1,13 @@
 package com.eofstudio.hydra.core.Standard;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Observable;
 import java.util.Observer;
+
+import sun.net.www.protocol.jar.URLJarFile;
 
 import com.eofstudio.hydra.core.*;
 
@@ -89,5 +94,32 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 			_PluginManager.getPluginSettings( Long.toString( packet.getPluginID() ) );
 		else
 			System.err.println( "PluginID and InstanceID was invalid" );
+	}
+	
+	@Override
+	public void loadPluginsFromFile( URL path, String classname ) throws MalformedURLException, ClassNotFoundException
+	{
+		ClassLoader classLoader = URLClassLoader.newInstance( new URL[]{path} );
+		Class<?>    clazz       = Class.forName( classname, false, classLoader );
+
+		if( !classIsPlugin( clazz ) )
+			return;
+	}
+	
+	/**
+	 * Determines if the class is a Plugin
+	 * @param clazz
+	 * @return
+	 */
+	private boolean classIsPlugin( Class<?> clazz ) 
+	{
+		for( Class<?> interfaceType : clazz.getInterfaces() )
+		{
+			// TODO: See if there is a better way of checking if it implements the Interface or Abstract class
+			if( interfaceType.getClass().getName() == "com.eofstudio.hydra.commons.plugin.IPlugin" )
+				return true;
+		}
+
+		return ( (Class<?>) clazz.getGenericSuperclass()).getName() == "com.eofstudio.hydra.commons.plugin.APlugin";
 	}
 }
