@@ -1,5 +1,7 @@
 package com.eofstudio.hydra.core.Standard;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,6 +11,7 @@ import java.util.Observer;
 
 import sun.net.www.protocol.jar.URLJarFile;
 
+import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
 import com.eofstudio.hydra.core.*;
 
 /**
@@ -97,13 +100,16 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 	}
 	
 	@Override
-	public void loadPluginsFromFile( URL path, String classname ) throws MalformedURLException, ClassNotFoundException
+	public void loadPluginsFromFile( URL path, String classname ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException
 	{
+		if( !new File( path.getFile() ).exists() )
+			throw new FileNotFoundException();
+		
 		ClassLoader classLoader = URLClassLoader.newInstance( new URL[]{path} );
 		Class<?>    clazz       = Class.forName( classname, false, classLoader );
-
+		
 		if( !classIsPlugin( clazz ) )
-			return;
+			throw new ClassNotAHydraPlugin( String.format( "%1s isn't a valid hydra plugin", classname ) );
 	}
 	
 	/**
