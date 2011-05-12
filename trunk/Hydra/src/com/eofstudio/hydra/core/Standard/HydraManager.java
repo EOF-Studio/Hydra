@@ -90,8 +90,6 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 	@Override
 	public void update( Observable o, Object arg )
 	{
-		System.out.println("Packet received");
-		
 		IHydraPacket packet = (IHydraPacket) arg;
 		
 		if( packet.getInstanceID() != null )
@@ -132,6 +130,10 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 	}
 	private void PassConnectionToInstance( IHydraPacket packet ) 
 	{
+		// TODO: Proper exception handling
+		if( _PluginManager.getPluginInstance( packet.getInstanceID() ) == null )
+			return;
+		
 		_PluginManager.getPluginInstance( packet.getInstanceID() ).addConnection( packet );
 	}
 }

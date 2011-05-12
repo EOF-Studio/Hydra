@@ -30,7 +30,7 @@ public class TimePlugin extends APlugin
 				{
 					if( getActiveConnections().get( i ).getSocket().getInputStream().available() == 0 )
 						continue;
-					
+
 					int size = 0;
 					
 					while( (size = getActiveConnections().get( i ).getSocket().getInputStream().available()) != 0 )
@@ -39,8 +39,11 @@ public class TimePlugin extends APlugin
 						
 						getActiveConnections().get( i ).getSocket().getInputStream().read( buffer );
 						
-						if( buffer[0] == 0x01 )
-							getActiveConnections().get( i ).getSocket().getOutputStream().write( Calendar.getInstance().getTime().toString().getBytes() );	
+						if( buffer[0] != 0x01 )
+							return;
+						
+						SendResponse( getActiveConnections().get( i ).getSocket(), Calendar.getInstance().getTime().toString().getBytes() );
+						return;
 					}
 				}
 			} 

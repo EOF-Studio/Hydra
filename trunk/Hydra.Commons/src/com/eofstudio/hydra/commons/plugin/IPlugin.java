@@ -5,4 +5,5 @@ public interface IPlugin extends Runnable
 	int getPluginID();
 	int getInstanceID();
 	void addConnection( IHydraPacket packet );
+	Thread getThread();
 }

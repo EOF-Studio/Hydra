@@ -128,17 +128,35 @@ public class TimePluginTest extends TestCase
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
 			socket.getOutputStream().write( new byte[]{0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x01} );
-			socket.getOutputStream().write( new byte[]{0x01} );
 			
-			String resonse = "";
 			int retries = 40;
 			
-			// wait until date has been received (or 1sec)
 			while( true )
+			{
+				if( socket.getInputStream().available() != 0 )
+				{
+					socket.getInputStream().read();
+					break;
+				}
+				
+				Thread.sleep( 5 );
+				
+				if( retries-- == 0 )
+					break;
+			}
+			
+			socket.getOutputStream().write( new byte[]{0x01} );
+
+			        retries              = 40;
+			String  resonse              = "";
+			boolean isWaitingForResponse = true;
+			
+			// wait until date has been received (or 1sec)
+			while( isWaitingForResponse )
 			{
 				if( socket.getInputStream().available() == 0 )
 				{
-					Thread.sleep( 25 );
+					Thread.sleep( 5 );
 
 					if( retries-- == 0 )
 						break;
@@ -153,8 +171,12 @@ public class TimePluginTest extends TestCase
 					socket.getInputStream().read( buffer );
 					
 					resonse += new String( buffer );
+					
+					isWaitingForResponse = false;
 				}
 			}
+			
+			System.out.println(String.format("'%1s'", resonse));
 			
 			// validate received data
 			assertTrue( resonse.length() != 0 );

@@ -24,7 +24,7 @@ public class SocketListener extends Observable implements ISocketListener, Runna
 	
 	public SocketListener( )
 	{
-		this( 1337, 1 * 1000 );
+		this( 1337, 10 );
 	}
 	
 	public SocketListener( int port, int delay )
