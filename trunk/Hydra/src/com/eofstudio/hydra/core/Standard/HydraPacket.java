@@ -3,29 +3,38 @@ package com.eofstudio.hydra.core.Standard;
 import java.io.IOException;
 import java.net.Socket;
 
-import com.eofstudio.hydra.core.IHydraPacket;
+import com.eofstudio.hydra.commons.plugin.IHydraPacket;
 
 public class HydraPacket implements IHydraPacket 
 {
-	private byte[] currentBuffer = new byte[0];
-	private long   version       = Long.MIN_VALUE;
-	private long   pluginID      = Long.MIN_VALUE;
-	private long   instanceID    = Long.MIN_VALUE;
+	private byte[] _CurrentBuffer = new byte[0];
+	private long   _Version       = Long.MIN_VALUE;
+	private long   _PluginID      = Long.MIN_VALUE;
+	private String _InstanceID    = null;
+	private Socket _Socket		  = null;
 	
 	@Override
-	public byte[] getCurrentBuffer() { return currentBuffer; }
+	public Socket getSocket() { return _Socket; }
 	
 	@Override
-	public long getVersion(){ return version; }
+	public byte[] getCurrentBuffer() { return _CurrentBuffer; }
 	
 	@Override
-	public long getPluginID(){ return pluginID; }
+	public long getVersion(){ return _Version; }
 	
 	@Override
-	public long getInstanceID(){ return instanceID; }
+	public long getPluginID(){ return _PluginID; }
+	
+	@Override
+	public String getInstanceID(){ return _InstanceID; }
+	
+	@Override
+	public void setInstanceID( String id ){ _InstanceID = id; }
 	
 	public HydraPacket( Socket socket ) throws InvalidHydraPacketException 
 	{
+		_Socket = socket;
+		
 		try 
 		{
 			int size = 0;
@@ -50,14 +59,14 @@ public class HydraPacket implements IHydraPacket
 
 	private void processInitialData() throws InvalidHydraPacketException
 	{
-		if( currentBuffer.length < 8 )
+		if( _CurrentBuffer.length < 8 )
 			throw new InvalidHydraPacketException("Packet is not a valid hydra packet");
 		
-		version  = byteArrayToInt( currentBuffer, 0 );
-		pluginID = byteArrayToInt( currentBuffer, 4 );
+		_Version  = byteArrayToInt( _CurrentBuffer, 0 );
+		_PluginID = byteArrayToInt( _CurrentBuffer, 4 );
 			
-		if( currentBuffer.length >= 12 )
-			instanceID = byteArrayToInt( currentBuffer, 8 );
+		if( _CurrentBuffer.length >= 12 )
+			_InstanceID = Long.toString( byteArrayToInt( _CurrentBuffer, 8 ) );
 	}
 
 	private long byteArrayToInt( byte[] b, int offset ) 
@@ -71,13 +80,13 @@ public class HydraPacket implements IHydraPacket
         return value;
     }
 	
-	private void appendData( byte[] dataToAppend ) 
+	protected void appendData( byte[] dataToAppend ) 
 	{
-		byte[] newArray = new byte[ currentBuffer.length + dataToAppend.length ];
+		byte[] newArray = new byte[ _CurrentBuffer.length + dataToAppend.length ];
 
-		System.arraycopy( currentBuffer, 0, newArray, 0, currentBuffer.length );
-		System.arraycopy( dataToAppend, 0, newArray, currentBuffer.length, dataToAppend.length );
+		System.arraycopy( _CurrentBuffer, 0, newArray, 0, _CurrentBuffer.length );
+		System.arraycopy( dataToAppend, 0, newArray, _CurrentBuffer.length, dataToAppend.length );
 		
-		currentBuffer = newArray;
+		_CurrentBuffer = newArray;
 	}
 }

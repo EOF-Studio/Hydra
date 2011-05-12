@@ -12,6 +12,7 @@ import java.util.Observer;
 import sun.net.www.protocol.jar.URLJarFile;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
+import com.eofstudio.hydra.commons.plugin.IHydraPacket;
 import com.eofstudio.hydra.core.*;
 
 /**
@@ -31,6 +32,7 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 	
 	public boolean getIsRunning() { return _IsRunning;	}
 	public ISocketListener getSocketListener() { return _SocketListener; }
+	public IPluginManager  getPluginManager() { return _PluginManager; }
 	
 	public HydraManager( boolean isAutoStartEnabled ) throws IOException
 	{
@@ -76,7 +78,8 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 			try
 			{
 				Thread.sleep(25);
-			} catch (InterruptedException e)
+			} 
+			catch( InterruptedException e )
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -91,41 +94,44 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 		
 		IHydraPacket packet = (IHydraPacket) arg;
 		
-		if( packet.getInstanceID() != Long.MIN_VALUE )
-			_PluginManager.getPluginInstance( Long.toString( packet.getInstanceID() ) );
+		if( packet.getInstanceID() != null )
+			PassConnectionToInstance( packet );
 		else if( packet.getPluginID() != Long.MIN_VALUE )
-			_PluginManager.getPluginSettings( Long.toString( packet.getPluginID() ) );
+			PassPacketToNewPluginInstance( packet );
 		else
 			System.err.println( "PluginID and InstanceID was invalid" );
 	}
 	
-	@Override
-	public void loadPluginsFromFile( URL path, String classname ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException
+	private void PassPacketToNewPluginInstance( IHydraPacket packet ) 
 	{
-		if( !new File( path.getFile() ).exists() )
-			throw new FileNotFoundException();
+		IPluginSettings settings = _PluginManager.getPluginSettings( Long.toString( packet.getPluginID() ) );
 		
-		ClassLoader classLoader = URLClassLoader.newInstance( new URL[]{path} );
-		Class<?>    clazz       = Class.forName( classname, false, classLoader );
+		// TODO: Make sure the settings are obeyed if the plugin instance is created
+		// TODO: Implement Execution slots akind those in Octopus.Net
 		
-		if( !classIsPlugin( clazz ) )
-			throw new ClassNotAHydraPlugin( String.format( "%1s isn't a valid hydra plugin", classname ) );
-	}
-	
-	/**
-	 * Determines if the class is a Plugin
-	 * @param clazz
-	 * @return
-	 */
-	private boolean classIsPlugin( Class<?> clazz ) 
-	{
-		for( Class<?> interfaceType : clazz.getInterfaces() )
+		try 
 		{
-			// TODO: See if there is a better way of checking if it implements the Interface or Abstract class
-			if( interfaceType.getClass().getName() == "com.eofstudio.hydra.commons.plugin.IPlugin" )
-				return true;
+			packet.setInstanceID( getPluginManager().InstanciatePlugin( settings ) );
+			PassConnectionToInstance( packet );
+		} 
+		catch( ClassNotFoundException e ) 
+		{
+			// TODO Actual exception handling
+			e.printStackTrace();
+		} 
+		catch( InstantiationException e ) 
+		{
+			// TODO Actual exception handling
+			e.printStackTrace();
+		} 
+		catch( IllegalAccessException e ) 
+		{
+			// TODO Actual exception handling
+			e.printStackTrace();
 		}
-
-		return ( (Class<?>) clazz.getGenericSuperclass()).getName() == "com.eofstudio.hydra.commons.plugin.APlugin";
+	}
+	private void PassConnectionToInstance( IHydraPacket packet ) 
+	{
+		_PluginManager.getPluginInstance( packet.getInstanceID() ).addConnection( packet );
 	}
 }

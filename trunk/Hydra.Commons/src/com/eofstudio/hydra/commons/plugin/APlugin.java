@@ -1,16 +1,20 @@
 package com.eofstudio.hydra.commons.plugin;
 
-import java.net.Socket;
 import java.util.ArrayList;
 
 public abstract class APlugin implements IPlugin 
 {
-	private ArrayList<Socket> _ActiveConnections;
-	private int               _InstanceID;
+	private ArrayList<IHydraPacket> _ActiveConnections;
+	private int                     _InstanceID;
 	
 	public APlugin( )
 	{
-		_ActiveConnections = new ArrayList<Socket>();
+		_ActiveConnections = new ArrayList<IHydraPacket>();
+	}
+	
+	protected ArrayList<IHydraPacket> getActiveConnections()
+	{
+		return _ActiveConnections;
 	}
 	
 	@Override
@@ -20,8 +24,8 @@ public abstract class APlugin implements IPlugin
 	}
 
 	@Override
-	public void addConnection( Socket socket ) 
+	public void addConnection( IHydraPacket packet ) 
 	{
-		_ActiveConnections.add( socket );
+		_ActiveConnections.add( packet );
 	}
 }

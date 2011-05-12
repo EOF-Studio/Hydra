@@ -1,4 +1,6 @@
-package com.eofstudio.hydra.core;
+package com.eofstudio.hydra.commons.plugin;
+
+import java.net.Socket;
 
 public interface IHydraPacket 
 {
@@ -24,5 +26,9 @@ public interface IHydraPacket
 	 * The instance ID the current packet is mean for.
 	 * @return default value is Long.MIN_VALUE
 	 */
-	long getInstanceID();
+	String getInstanceID();
+	
+	void setInstanceID( String id );
+
+	Socket getSocket();
 }
