@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.eofstudio.hydra.commons.exceptions.InvalidHydraPacketException;
 import com.eofstudio.hydra.core.IConnectionHandler;
 
 /**

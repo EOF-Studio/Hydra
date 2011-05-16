@@ -1,4 +1,4 @@
-package com.eofstudio.hydra.core.Standard;
+package com.eofstudio.hydra.commons.exceptions;
 
 public class InvalidHydraPacketException extends Exception
 {
@@ -23,5 +23,4 @@ public class InvalidHydraPacketException extends Exception
 	{
 		super(arg0);
 	}
-	
 }

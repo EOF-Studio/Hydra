@@ -64,7 +64,7 @@ public class PluginManager implements IPluginManager
 	}
 
 	@Override
-	public String InstanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException
+	public String instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
 		IPlugin plugin     = (IPlugin) settings.getClassDefinition().newInstance();
 		Random  random     = new Random();

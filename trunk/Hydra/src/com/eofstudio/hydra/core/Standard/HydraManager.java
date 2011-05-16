@@ -1,17 +1,9 @@
 package com.eofstudio.hydra.core.Standard;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Observable;
 import java.util.Observer;
 
-import sun.net.www.protocol.jar.URLJarFile;
-
-import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
 import com.eofstudio.hydra.core.*;
 
@@ -42,12 +34,31 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 			start();
 	}
 
+	public HydraManager( boolean isAutoStartEnabled, int port, int timeout ) throws IOException
+	{
+		this( isAutoStartEnabled );
+		
+		_SocketListener = new SocketListener( port, timeout );
+	}
+	
 	public void start() throws IOException
 	{
 		if( getIsRunning() )
 			return;
 		
 		_SocketListener.start();
+		_SocketListener.addObserver( this );
+		_IsRunning = true;
+		_Thread.start();
+	}
+	
+	@Override
+	public void start( int port, int timeout ) throws IOException
+	{
+		if( getIsRunning() )
+			return;
+		
+		_SocketListener.start( port, timeout );
 		_SocketListener.addObserver( this );
 		_IsRunning = true;
 		_Thread.start();
@@ -109,7 +120,7 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 		
 		try 
 		{
-			packet.setInstanceID( getPluginManager().InstanciatePlugin( settings ) );
+			packet.setInstanceID( getPluginManager().instanciatePlugin( settings ) );
 			PassConnectionToInstance( packet );
 		} 
 		catch( ClassNotFoundException e ) 

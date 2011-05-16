@@ -34,6 +34,23 @@ public class SocketListenerTest extends TestCase
 		}
 	}
 	
+	public void testShouldBeAbleToSetPortAndTimeoutOnStart()
+	{
+		ISocketListener sl = new SocketListener( ); 
+		
+		try 
+		{
+			sl.start( 5000, 123 );
+			assertEquals(5000, sl.getPort());
+			assertEquals(123, sl.getTimeout());
+			sl.stop(true);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public void testIsRunningShouldBeFalseWhenStopHasBeenCalled()
 	{
 		ISocketListener sl = new SocketListener( 1337, 1000 ); 

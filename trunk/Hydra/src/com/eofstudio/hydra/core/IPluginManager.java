@@ -22,5 +22,5 @@ public interface IPluginManager
 	 * @throws FileNotFoundException 
 	 */
 	void loadPluginsFromFile( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException;
-	String InstanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException;
+	String instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException;
 }

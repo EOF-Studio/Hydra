@@ -24,6 +24,42 @@ public class HydraManagerTest extends TestCase
 		}
 	}
 	
+	public void testShouldInitilizeDefaultHydraManagerWithCustomSocketListenerSettings()
+	{
+		try
+		{
+			IHydraManager manager = new HydraManager( false, 5000, 123 );
+			
+			assertEquals( 5000, manager.getSocketListener().getPort() );
+			assertEquals( 123, manager.getSocketListener().getTimeout() );
+		}
+		catch( Exception e ) 
+		{
+			assertFalse(true);
+			e.printStackTrace();
+		}
+	}
+	
+	public void testShouldSetPortAndTimeoutOnStart()
+	{
+		try
+		{
+			IHydraManager manager = new HydraManager( false );
+			
+			manager.start( 5000, 123 );  
+			
+			assertEquals( 5000, manager.getSocketListener().getPort() );
+			assertEquals( 123, manager.getSocketListener().getTimeout() );
+			
+			manager.stop(true);
+		}
+		catch( Exception e ) 
+		{
+			assertFalse(true);
+			e.printStackTrace();
+		}
+	}
+	
 	public void testShouldInitilizeAutoStartHydraManager()
 	{
 		try

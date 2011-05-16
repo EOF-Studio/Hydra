@@ -13,13 +13,13 @@ public class SocketListener extends Observable implements ISocketListener, Runna
 	protected int timeout;
 	protected int port;
 	
-	private ServerSocket  socket;
-	private Thread        thread;
-	private boolean       isRunning = false;
+	private ServerSocket       socket;
+	private Thread             thread;
+	private boolean            isRunning = false;
 	private IConnectionHandler connectionHandler;
 	
-	public int getPort() { return port;	}
-	public int getTimeout() { return timeout; }
+	public int     getPort()      { return port;	  }
+	public int     getTimeout()   { return timeout;   }
 	public boolean getIsRunning() { return isRunning; }
 	
 	public SocketListener( )
@@ -32,6 +32,15 @@ public class SocketListener extends Observable implements ISocketListener, Runna
 		this.port              = port;
 		this.timeout           = delay;
 		this.connectionHandler = new ConnectionHandler( this );
+	}
+	
+	@Override 
+	public boolean start( int port, int timeout ) throws IOException
+	{
+		this.port    = port;
+		this.timeout = timeout;
+		
+		return start();
 	}
 	
 	@Override 
@@ -78,6 +87,7 @@ public class SocketListener extends Observable implements ISocketListener, Runna
 		{
 			try
 			{
+				System.out.println("waiting for connection");
 				connectionHandler.newConnection( socket.accept() );
 			} 
 			catch( SocketTimeoutException e )

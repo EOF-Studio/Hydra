@@ -3,6 +3,7 @@ package com.eofstudio.hydra.core.Standard;
 import java.io.IOException;
 import java.net.Socket;
 
+import com.eofstudio.hydra.commons.exceptions.InvalidHydraPacketException;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
 
 public class HydraPacket implements IHydraPacket 

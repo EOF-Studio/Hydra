@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 
-import com.eofstudio.hydra.Standard.test.TestObserver;
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
 import com.eofstudio.hydra.core.IHydraManager;
-import com.eofstudio.hydra.core.ISocketListener;
 import com.eofstudio.hydra.core.Standard.HydraManager;
-import com.eofstudio.hydra.core.Standard.SocketListener;
 
 import junit.framework.TestCase;
 
