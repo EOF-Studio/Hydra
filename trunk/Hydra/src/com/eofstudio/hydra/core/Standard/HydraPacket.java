@@ -39,26 +39,32 @@ public class HydraPacket implements IHydraPacket
 	@Override
 	public byte[] getCurrentBuffer() 
 	{
-		try 
+		synchronized( _CurrentBuffer )
 		{
-			int size = 0;
+			_CurrentBuffer = new byte[0];
 			
-			while( (size = _Socket.getInputStream().available()) != 0 )
+			try 
 			{
-				byte[] buffer = new byte[size];
+				int size = 0;
 				
-				_Socket.getInputStream().read( buffer );
-
-				appendData( buffer );
+				while( (size = _Socket.getInputStream().available()) != 0 )
+				{
+					byte[] buffer = new byte[size];
+					
+					_Socket.getInputStream().read( buffer );
+	
+					appendData( buffer );
+				}
+			} 
+			catch( IOException e ) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} 
-		catch( IOException e ) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return _CurrentBuffer; 
+		
 	}
 
 	private void processInitialData( byte[] data ) throws InvalidHydraPacketException
