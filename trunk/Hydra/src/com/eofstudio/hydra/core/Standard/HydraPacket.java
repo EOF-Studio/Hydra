@@ -18,9 +18,6 @@ public class HydraPacket implements IHydraPacket
 	public Socket getSocket() { return _Socket; }
 	
 	@Override
-	public byte[] getCurrentBuffer() { return _CurrentBuffer; }
-	
-	@Override
 	public long getVersion(){ return _Version; }
 	
 	@Override
@@ -35,16 +32,22 @@ public class HydraPacket implements IHydraPacket
 	public HydraPacket( Socket socket ) throws InvalidHydraPacketException 
 	{
 		_Socket = socket;
-		
+
+		processInitialData( getCurrentBuffer() );
+	}
+	
+	@Override
+	public byte[] getCurrentBuffer() 
+	{
 		try 
 		{
 			int size = 0;
 			
-			while( (size = socket.getInputStream().available()) != 0 )
+			while( (size = _Socket.getInputStream().available()) != 0 )
 			{
 				byte[] buffer = new byte[size];
 				
-				socket.getInputStream().read( buffer );
+				_Socket.getInputStream().read( buffer );
 
 				appendData( buffer );
 			}
@@ -55,10 +58,10 @@ public class HydraPacket implements IHydraPacket
 			e.printStackTrace();
 		}
 		
-		processInitialData();
+		return _CurrentBuffer; 
 	}
 
-	private void processInitialData() throws InvalidHydraPacketException
+	private void processInitialData( byte[] data ) throws InvalidHydraPacketException
 	{
 		if( _CurrentBuffer.length < 8 )
 			throw new InvalidHydraPacketException("Packet is not a valid hydra packet");
