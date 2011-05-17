@@ -16,28 +16,21 @@ public abstract class AProgram
 		
 		for( int i = 0; i < args.length; i++ )
 		{
-			try
-			{
-				switch( Commands.valueOf( args[i] ) ) 
-				{
-					case Port:
-						if( i + 1 >= args.length )
-							throw new IllegalArgumentException();
-							
-						parameters.add( new Parameter( Commands.Port, Integer.parseInt( args[ i+1 ] ) ) );
-						i++;
-						break;
-				
-					default:
-						OnInputError( "The parameter '%1s' with the value '%2s' is not recognized", args[i], i + 1 >= args.length ? null : args[i+1] );
-						break;
-				}
-				
-			}
-			catch( IllegalArgumentException e )
-			{
+			if( !args[i].startsWith( "-" ) )
 				OnInputError( "The parameter '%1s' with the value '%2s' is not recognized", args[i], i + 1 >= args.length ? null : args[i+1] );
+			
+			String key   = args[i];
+			String value = null;
+			
+			if( !args[i + 1].startsWith( "-" ) )
+			{
+				value = args[i + 1];
+				i++;
 			}
+			
+			
+			
+			parameters.add( new Parameter( Commands.valueOf( key.substring( 1 ).toLowerCase() ), value ) );
 		}
 		
 		return parameters;

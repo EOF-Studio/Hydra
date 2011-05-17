@@ -87,7 +87,6 @@ public class SocketListener extends Observable implements ISocketListener, Runna
 		{
 			try
 			{
-				System.out.println("waiting for connection");
 				connectionHandler.newConnection( socket.accept() );
 			} 
 			catch( SocketTimeoutException e )
