@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -28,6 +29,18 @@ public class PluginManager implements IPluginManager
 	public IPlugin getPluginInstance( long instanceID )
 	{
 		return _PluginInstances.get( instanceID );
+	}
+	
+	@Override
+	public Iterator<IPluginSettings> getPluginSettings() 
+	{
+		return _InstalledPlugins.values().iterator();
+	}
+
+	@Override
+	public Iterator<IPlugin> getPluginInstance() 
+	{
+		return _PluginInstances.values().iterator();
 	}
 	
 	@Override
@@ -59,14 +72,23 @@ public class PluginManager implements IPluginManager
 	 */
 	private boolean classIsPlugin( Class<?> clazz ) 
 	{
+		if( clazz.getGenericSuperclass() == null )
+			return false;
+		
 		for( Class<?> interfaceType : clazz.getInterfaces() )
 		{
 			// TODO: See if there is a better way of checking if it implements the Interface or Abstract class
 			if( interfaceType.getClass().getName() == "com.eofstudio.hydra.commons.plugin.IPlugin" )
 				return true;
+			
+			if( classIsPlugin( interfaceType ) )
+				return true;
 		}
-
-		return ( (Class<?>) clazz.getGenericSuperclass()).getName() == "com.eofstudio.hydra.commons.plugin.APlugin";
+		
+		if( ( (Class<?>) clazz.getGenericSuperclass()).getName() == "com.eofstudio.hydra.commons.plugin.APlugin" )
+			return true;
+		else
+			return classIsPlugin( (Class<?>) clazz.getGenericSuperclass() );
 	}
 
 	@Override

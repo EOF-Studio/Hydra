@@ -1,6 +1,5 @@
 package com.eofstudio.hydra.plugin.test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
@@ -146,9 +145,9 @@ public class TimePluginTest extends TestCase
 
 			socket.getOutputStream().write( new byte[]{0x01} );
 			
-			        retries              = 40;
-			long    instanceID           = Long.MIN_VALUE;
-			byte[]  data = new byte[0];
+			        retries    = 40;
+			long    instanceID = Long.MIN_VALUE;
+			byte[]  data       = new byte[0];
 			
 			// wait until date has been received (or 1sec)
 			while( true )

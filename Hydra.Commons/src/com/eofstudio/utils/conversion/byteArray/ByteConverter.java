@@ -14,6 +14,7 @@ public class ByteConverter
 	    DataOutputStream      dos = new DataOutputStream(bos); 
 	    
 	    dos.writeLong( value ); 
+	    
 	    return  bos.toByteArray();  
 	}
 

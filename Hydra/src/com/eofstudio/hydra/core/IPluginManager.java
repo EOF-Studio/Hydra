@@ -3,6 +3,7 @@ package com.eofstudio.hydra.core;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
@@ -11,6 +12,8 @@ public interface IPluginManager
 {
 	IPluginSettings getPluginSettings( long pluginID );
 	IPlugin getPluginInstance( long instanceID );
+	Iterator<IPluginSettings> getPluginSettings();
+	Iterator<IPlugin> getPluginInstance(  );
 	
 	
 	/**
