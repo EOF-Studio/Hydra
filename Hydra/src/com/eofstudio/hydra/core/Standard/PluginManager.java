@@ -15,23 +15,23 @@ import com.eofstudio.hydra.core.IPluginSettings;
 
 public class PluginManager implements IPluginManager
 {
-	private Map<String,IPluginSettings> _InstalledPlugins = new HashMap<String, IPluginSettings>();
-	private Map<String,IPlugin>         _PluginInstances  = new HashMap<String, IPlugin>();
+	private Map<Long,IPluginSettings> _InstalledPlugins = new HashMap<Long, IPluginSettings>();
+	private Map<Long,IPlugin>         _PluginInstances  = new HashMap<Long, IPlugin>();
 	
 	@Override
-	public IPluginSettings getPluginSettings( String pluginID )
+	public IPluginSettings getPluginSettings( long pluginID )
 	{
 		return _InstalledPlugins.get( pluginID );
 	}
 	
 	@Override
-	public IPlugin getPluginInstance( String instanceID )
+	public IPlugin getPluginInstance( long instanceID )
 	{
 		return _PluginInstances.get( instanceID );
 	}
 	
 	@Override
-	public void loadPlugin( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException
+	public void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException
 	{
 		if( !new File( path.getFile() ).exists() )
 			throw new FileNotFoundException();
@@ -43,7 +43,7 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public void loadPlugin( Class<?> plugin, String pluginID ) throws ClassNotAHydraPlugin
+	public void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPlugin
 	{
 		if( !classIsPlugin( plugin ) )
 			throw new ClassNotAHydraPlugin( String.format( "%1s isn't a valid hydra plugin", plugin.getName() ) );
@@ -70,11 +70,11 @@ public class PluginManager implements IPluginManager
 	}
 
 	@Override
-	public String instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException
+	public long instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
 		IPlugin plugin     = (IPlugin) settings.getClassDefinition().newInstance();
 		Random  random     = new Random();
-		String  instanceID = Long.toString( random.nextLong() );
+		long    instanceID = random.nextLong();
 		
 		synchronized( _PluginInstances ) 
 		{

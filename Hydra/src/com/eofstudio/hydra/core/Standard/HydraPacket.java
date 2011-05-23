@@ -5,13 +5,14 @@ import java.net.Socket;
 
 import com.eofstudio.hydra.commons.exceptions.InvalidHydraPacketException;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
+import com.eofstudio.utils.conversion.byteArray.ByteConverter;
 
 public class HydraPacket implements IHydraPacket 
 {
 	private byte[] _CurrentBuffer = new byte[0];
 	private long   _Version       = Long.MIN_VALUE;
 	private long   _PluginID      = Long.MIN_VALUE;
-	private String _InstanceID    = null;
+	private long   _InstanceID    = Long.MIN_VALUE;
 	private Socket _Socket		  = null;
 	
 	@Override
@@ -24,12 +25,12 @@ public class HydraPacket implements IHydraPacket
 	public long getPluginID(){ return _PluginID; }
 	
 	@Override
-	public String getInstanceID(){ return _InstanceID; }
+	public long getInstanceID(){ return _InstanceID; }
 	
 	@Override
-	public void setInstanceID( String id ){ _InstanceID = id; }
+	public void setInstanceID( long id ){ _InstanceID = id; }
 	
-	public HydraPacket( Socket socket ) throws InvalidHydraPacketException 
+	public HydraPacket( Socket socket ) throws InvalidHydraPacketException, IOException 
 	{
 		_Socket = socket;
 
@@ -67,28 +68,17 @@ public class HydraPacket implements IHydraPacket
 		
 	}
 
-	private void processInitialData( byte[] data ) throws InvalidHydraPacketException
+	private void processInitialData( byte[] data ) throws InvalidHydraPacketException, IOException
 	{
 		if( _CurrentBuffer.length < 8 )
 			throw new InvalidHydraPacketException("Packet is not a valid hydra packet");
 		
-		_Version  = byteArrayToInt( _CurrentBuffer, 0 );
-		_PluginID = byteArrayToInt( _CurrentBuffer, 4 );
+		_Version  = ByteConverter.fromByteArray( _CurrentBuffer, 0 );
+		_PluginID = ByteConverter.fromByteArray( _CurrentBuffer, 8 );
 			
-		if( _CurrentBuffer.length >= 12 )
-			_InstanceID = Long.toString( byteArrayToInt( _CurrentBuffer, 8 ) );
+		if( _CurrentBuffer.length > 16 )
+			_InstanceID = ByteConverter.fromByteArray( _CurrentBuffer, 16 );
 	}
-
-	private long byteArrayToInt( byte[] b, int offset ) 
-	{
-		long value = 0;
-        for( int i = 0; i < 4; i++) 
-        {
-            int shift = (4 - 1 - i) * 8;
-            value += ( b[i + offset] & 0x000000FF) << shift;
-        }
-        return value;
-    }
 	
 	protected void appendData( byte[] dataToAppend ) 
 	{

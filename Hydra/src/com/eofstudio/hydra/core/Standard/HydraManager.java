@@ -101,27 +101,16 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 	@Override
 	public void update( Observable o, Object arg )
 	{
-		IHydraPacket packet = (IHydraPacket) arg;
-		
-		if( packet.getInstanceID() != null )
-			PassConnectionToInstance( packet );
-		else if( packet.getPluginID() != Long.MIN_VALUE )
-			PassPacketToNewPluginInstance( packet );
-		else
-			System.err.println( "PluginID and InstanceID was invalid" );
-	}
-	
-	private void PassPacketToNewPluginInstance( IHydraPacket packet ) 
-	{
-		IPluginSettings settings = _PluginManager.getPluginSettings( Long.toString( packet.getPluginID() ) );
-		
-		// TODO: Make sure the settings are obeyed if the plugin instance is created
-		// TODO: Implement Execution slots akind those in Octopus.Net
-		
 		try 
 		{
-			packet.setInstanceID( getPluginManager().instanciatePlugin( settings ) );
-			PassConnectionToInstance( packet );
+			IHydraPacket packet = (IHydraPacket) arg;
+			
+			if( packet.getInstanceID() != Long.MIN_VALUE )
+				PassConnectionToInstance( packet );
+			else if( packet.getPluginID() != Long.MIN_VALUE )
+				PassPacketToNewPluginInstance( packet );
+			else
+				System.err.println( "PluginID and InstanceID was invalid" );
 		} 
 		catch( ClassNotFoundException e ) 
 		{
@@ -137,9 +126,26 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 		{
 			// TODO Actual exception handling
 			e.printStackTrace();
+		} catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-	private void PassConnectionToInstance( IHydraPacket packet ) 
+	
+	private void PassPacketToNewPluginInstance( IHydraPacket packet ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException 
+	{
+		System.out.println( packet.getPluginID() );
+		IPluginSettings settings = _PluginManager.getPluginSettings( packet.getPluginID() );
+		
+		// TODO: Make sure the settings are obeyed if the plugin instance is created
+		// TODO: Implement Execution slots akin those in Octopus.Net
+		
+		packet.setInstanceID( getPluginManager().instanciatePlugin( settings ) );
+		PassConnectionToInstance( packet );
+
+	}
+	private void PassConnectionToInstance( IHydraPacket packet ) throws IOException 
 	{
 		// TODO: Proper exception handling
 		if( _PluginManager.getPluginInstance( packet.getInstanceID() ) == null )

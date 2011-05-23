@@ -5,17 +5,13 @@ import java.util.Observer;
 
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
 
-public class TestObserver implements Observer {
-
-	private byte[] data = null;
-	
-	public byte[] getData() { return data; }
+public class TestObserver implements Observer 
+{
+	public IHydraPacket packet;
 	
 	@Override
 	public void update( Observable o, Object arg )
 	{
-		IHydraPacket packet = ( IHydraPacket ) arg;
-		
-		data = packet.getCurrentBuffer();
+		packet = ( IHydraPacket ) arg;
 	}
 }

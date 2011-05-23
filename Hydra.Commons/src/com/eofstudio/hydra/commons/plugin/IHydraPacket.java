@@ -26,9 +26,9 @@ public interface IHydraPacket
 	 * The instance ID the current packet is mean for.
 	 * @return default value is Long.MIN_VALUE
 	 */
-	String getInstanceID();
+	long getInstanceID();
 	
-	void setInstanceID( String id );
+	void setInstanceID( long id );
 
 	Socket getSocket();
 }

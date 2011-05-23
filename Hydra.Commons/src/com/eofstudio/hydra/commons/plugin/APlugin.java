@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.eofstudio.utils.conversion.byteArray.ByteConverter;
+
 public abstract class APlugin implements IPlugin
 {
 	private ArrayList<IHydraPacket> _ActiveConnections;
@@ -37,11 +39,10 @@ public abstract class APlugin implements IPlugin
 	}
 
 	@Override
-	public void addConnection( IHydraPacket packet ) 
+	public void addConnection( IHydraPacket packet ) throws IOException 
 	{
 		_ActiveConnections.add( packet );
-		
-		SendResponse( packet.getSocket(), new byte[]{0x7f} );
+		SendResponse( packet.getSocket(), ByteConverter.toByteArray( packet.getInstanceID() ) );
 	}
 
 	protected void SendResponse( Socket socket, byte[] data ) 
@@ -50,7 +51,6 @@ public abstract class APlugin implements IPlugin
 		try 
 		{
 			socket.getOutputStream().write( data );
-			socket.getOutputStream().flush();
 		} 
 		catch( IOException e ) 
 		{

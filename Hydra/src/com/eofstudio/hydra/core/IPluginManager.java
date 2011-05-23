@@ -9,8 +9,8 @@ import com.eofstudio.hydra.commons.plugin.IPlugin;
 
 public interface IPluginManager
 {
-	IPluginSettings getPluginSettings( String pluginID );
-	IPlugin getPluginInstance( String instanceID );
+	IPluginSettings getPluginSettings( long pluginID );
+	IPlugin getPluginInstance( long instanceID );
 	
 	
 	/**
@@ -21,8 +21,8 @@ public interface IPluginManager
 	 * @throws ClassNotAHydraPlugin 
 	 * @throws FileNotFoundException 
 	 */
-	void loadPlugin( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException;
+	void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException;
 	
-	void loadPlugin( Class<?> plugin, String pluginID ) throws ClassNotAHydraPlugin;
-	String instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException;
+	void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPlugin;
+	long instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException;
 }

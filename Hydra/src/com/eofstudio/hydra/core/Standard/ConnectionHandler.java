@@ -86,7 +86,13 @@ public class ConnectionHandler extends Observable implements IConnectionHandler,
 				{
 					setChanged();
 					notifyObservers( new HydraPacket( socket ) );
+
 				} 
+				catch( IOException e ) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				catch( InvalidHydraPacketException e )
 				{
 					// TODO Auto-generated catch block

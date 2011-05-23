@@ -125,12 +125,31 @@ public class HydraManagerTest extends TestCase
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
-			socket.getOutputStream().write( new byte[]{0x00,0x00,0x0f,0x01,0x00,0x00,0x00,0x01,0x7f,0x7f,0x7f,0x7f} );
+			socket.getOutputStream().write( new byte[]{0x00,0x00,0x0f,0x00,0x00,0x00,0x0f,0x01,0x00,0x00,0x0f,0x00,0x00,0x00,0x00,0x01,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f} );
 			
 			int retries = 40;
 			
+			while( true )
+			{
+				if( socket.getInputStream().available() != 0 )
+				{
+					socket.getInputStream().read();
+					break;
+				}
+				
+				Thread.sleep( 5 );
+				
+				if( retries-- == 0 )
+					break;
+			}
+			
+			socket.getOutputStream().write( new byte[]{0x0f,0x0f,0x0f} );
+			
+			       retries = 40;
+			byte[] data    = null;
+			
 			// wait until date has been received (or 1sec)
-			while( obs.getData() == null )
+			while( ( data = obs.packet.getCurrentBuffer() ).length == 0 )
 			{
 				Thread.sleep(25);
 				
@@ -141,10 +160,10 @@ public class HydraManagerTest extends TestCase
 				}
 			}
 			
-			// validate received data
-			assertEquals(0x0f, obs.getData()[2] );
-			
 			m1.stop(true);
+			
+			// validate received data
+			assertEquals(0x0f, data[2] );
 		} 
 		catch (IOException e) 
 		{

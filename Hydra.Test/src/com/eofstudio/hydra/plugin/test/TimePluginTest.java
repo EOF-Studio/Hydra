@@ -1,5 +1,6 @@
 package com.eofstudio.hydra.plugin.test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
@@ -8,6 +9,7 @@ import java.net.URL;
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
 import com.eofstudio.hydra.core.IHydraManager;
 import com.eofstudio.hydra.core.Standard.HydraManager;
+import com.eofstudio.utils.conversion.byteArray.ByteConverter;
 
 import junit.framework.TestCase;
 
@@ -21,7 +23,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", 1 );
 		} 
 		catch( IOException e ) 
 		{
@@ -54,7 +56,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", 1 );
 		} 
 		catch( IOException e ) 
 		{
@@ -85,7 +87,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/MISSING.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/MISSING.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", 1 );
 		} 
 		catch( FileNotFoundException e ) 
 		{
@@ -120,11 +122,11 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", 1 );
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
-			socket.getOutputStream().write( new byte[]{0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x01} );
+			socket.getOutputStream().write( new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01} );
 			
 			int retries = 40;
 			
@@ -132,7 +134,7 @@ public class TimePluginTest extends TestCase
 			{
 				if( socket.getInputStream().available() != 0 )
 				{
-					socket.getInputStream().read();
+
 					break;
 				}
 				
@@ -141,17 +143,19 @@ public class TimePluginTest extends TestCase
 				if( retries-- == 0 )
 					break;
 			}
-			
-			socket.getOutputStream().write( new byte[]{0x01} );
 
+			socket.getOutputStream().write( new byte[]{0x01} );
+			
 			        retries              = 40;
-			String  resonse              = "";
-			boolean isWaitingForResponse = true;
+			long    instanceID           = Long.MIN_VALUE;
+			byte[]  data = new byte[0];
 			
 			// wait until date has been received (or 1sec)
-			while( isWaitingForResponse )
+			while( true )
 			{
-				if( socket.getInputStream().available() == 0 )
+				int available = socket.getInputStream().available();
+				
+				if( available == 0 )
 				{
 					Thread.sleep( 5 );
 
@@ -159,24 +163,21 @@ public class TimePluginTest extends TestCase
 						break;
 				}
 			
-				int size = 0;
-				
-				while( (size = socket.getInputStream().available()) != 0 )
+				if( available != 0 )
 				{
-					byte[] buffer = new byte[size];
+					byte[] buffer = new byte[ data.length + available ];
 					
-					socket.getInputStream().read( buffer );
-					
-					resonse += new String( buffer );
-					
-					isWaitingForResponse = false;
+					System.arraycopy( data, 0, buffer, 0, data.length );
+					socket.getInputStream().read( buffer, data.length, available );
+
+					data = buffer;
 				}
 			}
 			
-			System.out.println(String.format("'%1s'", resonse));
-			
-			// validate received data
-			assertTrue( resonse.length() != 0 );
+			instanceID =  ByteConverter.fromByteArray( data, 0 );		
+
+			assertTrue( data.length > 8 );
+			assertTrue( instanceID != Long.MIN_VALUE );
 		} 
 		catch( IOException e ) 
 		{

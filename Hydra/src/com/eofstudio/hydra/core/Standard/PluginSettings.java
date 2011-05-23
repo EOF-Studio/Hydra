@@ -5,15 +5,15 @@ import com.eofstudio.hydra.core.IPluginSettings;
 public class PluginSettings implements IPluginSettings 
 {
 	private Class<?> _ClassDefinition;
-	private String   _PluginID;
+	private long   _PluginID;
 	
 	@Override
 	public Class<?> getClassDefinition() { return _ClassDefinition; }
 
 	@Override
-	public String getPluginID() { return _PluginID; }
+	public long getPluginID() { return _PluginID; }
 	
-	public PluginSettings( Class<?> classDefinition, String pluginID ) 
+	public PluginSettings( Class<?> classDefinition, long pluginID ) 
 	{
 		_ClassDefinition = classDefinition;
 		_PluginID        = pluginID;
