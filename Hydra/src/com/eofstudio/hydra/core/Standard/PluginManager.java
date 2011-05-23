@@ -31,7 +31,7 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public void loadPluginsFromFile( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException
+	public void loadPlugin( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException
 	{
 		if( !new File( path.getFile() ).exists() )
 			throw new FileNotFoundException();
@@ -39,11 +39,17 @@ public class PluginManager implements IPluginManager
 		ClassLoader classLoader = URLClassLoader.newInstance( new URL[]{path} );
 		Class<?>    clazz       = Class.forName( classname, false, classLoader );
 		
-		if( !classIsPlugin( clazz ) )
-			throw new ClassNotAHydraPlugin( String.format( "%1s isn't a valid hydra plugin", classname ) );
+		loadPlugin( clazz, pluginID );
+	}
+	
+	@Override
+	public void loadPlugin( Class<?> plugin, String pluginID ) throws ClassNotAHydraPlugin
+	{
+		if( !classIsPlugin( plugin ) )
+			throw new ClassNotAHydraPlugin( String.format( "%1s isn't a valid hydra plugin", plugin.getName() ) );
 		
 		// TODO: Add more settings to the plugin, how many are allowed to run at one time, etc.
-		_InstalledPlugins.put( pluginID, new PluginSettings( clazz, pluginID ) );
+		_InstalledPlugins.put( pluginID, new PluginSettings( plugin, pluginID ) );
 	}
 	
 	/**

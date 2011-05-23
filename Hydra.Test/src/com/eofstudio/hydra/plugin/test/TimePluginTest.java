@@ -21,7 +21,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPluginsFromFile( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "1" );
 		} 
 		catch( IOException e ) 
 		{
@@ -54,7 +54,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPluginsFromFile( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "1" );
 		} 
 		catch( IOException e ) 
 		{
@@ -85,7 +85,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPluginsFromFile( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/MISSING.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/MISSING.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "1" );
 		} 
 		catch( FileNotFoundException e ) 
 		{
@@ -120,7 +120,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPluginsFromFile( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "1" );
+			manager.getPluginManager().loadPlugin( new URL( "file:/C:/Users/Fyhr/Desktop/hydra/trunk/lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "1" );
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
