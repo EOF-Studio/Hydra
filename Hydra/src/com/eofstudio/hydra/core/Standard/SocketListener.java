@@ -65,7 +65,7 @@ public class SocketListener extends Observable implements ISocketListener, Runna
 		while( isBlocking )
 		{
 			if( socket.isClosed() )
-				return;
+				break;
 			
 			try
 			{

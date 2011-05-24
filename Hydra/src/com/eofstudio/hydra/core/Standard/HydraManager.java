@@ -37,6 +37,7 @@ public class HydraManager implements IHydraManager, Observer
 		_SocketListener = new SocketListener( port, timeout );
 	}
 	
+	@Override
 	public void start() throws IOException
 	{
 		if( getIsRunning() )
@@ -56,6 +57,7 @@ public class HydraManager implements IHydraManager, Observer
 		_SocketListener.addObserver( this );
 	}
 
+	@Override
 	public void stop( boolean isBlocking )
 	{
 		try
