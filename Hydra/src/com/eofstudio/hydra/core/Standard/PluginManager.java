@@ -72,12 +72,12 @@ public class PluginManager implements IPluginManager
 	 */
 	private boolean classIsPlugin( Class<?> clazz ) 
 	{
+		// TODO: Refactor and see if there is a better way of checking if it implements the Interface or Abstract class
 		if( clazz.getGenericSuperclass() == null )
 			return false;
 		
 		for( Class<?> interfaceType : clazz.getInterfaces() )
 		{
-			// TODO: See if there is a better way of checking if it implements the Interface or Abstract class
 			if( interfaceType.getClass().getName() == "com.eofstudio.hydra.commons.plugin.IPlugin" )
 				return true;
 			

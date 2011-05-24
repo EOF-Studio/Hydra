@@ -15,21 +15,17 @@ import com.eofstudio.hydra.core.*;
  * @author Jesper Fyhr Knudsen
  *
  */
-public class HydraManager implements IHydraManager, Runnable, Observer
+public class HydraManager implements IHydraManager, Observer
 {
-	private boolean         _IsRunning      = false;
 	private IPluginManager  _PluginManager  = new PluginManager();
 	private ISocketListener _SocketListener = new SocketListener();
-	private Thread          _Thread;
 	
-	public boolean getIsRunning() { return _IsRunning;	}
+	public boolean getIsRunning() { return _SocketListener.getIsRunning();	}
 	public ISocketListener getSocketListener() { return _SocketListener; }
 	public IPluginManager  getPluginManager() { return _PluginManager; }
 	
 	public HydraManager( boolean isAutoStartEnabled ) throws IOException
 	{
-		_Thread = new Thread( this );
-		
 		if( isAutoStartEnabled )
 			start();
 	}
@@ -48,8 +44,6 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 		
 		_SocketListener.start();
 		_SocketListener.addObserver( this );
-		_IsRunning = true;
-		_Thread.start();
 	}
 	
 	@Override
@@ -60,8 +54,6 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 		
 		_SocketListener.start( port, timeout );
 		_SocketListener.addObserver( this );
-		_IsRunning = true;
-		_Thread.start();
 	}
 
 	public void stop( boolean isBlocking )
@@ -70,31 +62,11 @@ public class HydraManager implements IHydraManager, Runnable, Observer
 		{
 			_SocketListener.stop( isBlocking );
 			_SocketListener.deleteObserver( this );
-			_IsRunning = false;
-			
-			// TODO ADD blocking logic here
 		}
 		catch( IOException e )
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public void run()
-	{
-		while( getIsRunning() )
-		{
-			try
-			{
-				Thread.sleep(25);
-			} 
-			catch( InterruptedException e )
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 
