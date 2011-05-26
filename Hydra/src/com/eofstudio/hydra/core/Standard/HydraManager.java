@@ -109,7 +109,6 @@ public class HydraManager implements IHydraManager, Observer
 	
 	private void PassPacketToNewPluginInstance( IHydraPacket packet ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException 
 	{
-		System.out.println( packet.getPluginID() );
 		IPluginSettings settings = _PluginManager.getPluginSettings( packet.getPluginID() );
 		
 		// TODO: Make sure the settings are obeyed if the plugin instance is created

@@ -1,7 +1,6 @@
 package com.eofstudio.hydra.console.standard;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 

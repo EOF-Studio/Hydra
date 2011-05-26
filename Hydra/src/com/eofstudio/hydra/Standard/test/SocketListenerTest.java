@@ -165,11 +165,10 @@ public class SocketListenerTest extends TestCase
 			
 			socket.getOutputStream().write( new byte[]{0x0f,0x0f,0x0f} );
 			
-			       retries = 40;
-			byte[] data    = null;
-			
+			retries = 40;
+
 			// wait until date has been received (or 1sec)
-			while( ( data = obs.packet.getCurrentBuffer() ).length == 0 )
+			while( obs.packet.getCurrentBuffer().length == 0 )
 			{
 				Thread.sleep(25);
 				
