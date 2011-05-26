@@ -118,6 +118,7 @@ public class HydraManager implements IHydraManager, Observer
 		PassConnectionToInstance( packet );
 
 	}
+	
 	private void PassConnectionToInstance( IHydraPacket packet ) throws IOException 
 	{
 		// TODO: Proper exception handling
