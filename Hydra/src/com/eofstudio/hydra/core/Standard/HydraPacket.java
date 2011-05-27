@@ -5,7 +5,7 @@ import java.net.Socket;
 
 import com.eofstudio.hydra.commons.exceptions.InvalidHydraPacketException;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
-import com.eofstudio.utils.conversion.byteArray.ByteConverter;
+import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
 public class HydraPacket implements IHydraPacket 
 {
@@ -73,11 +73,11 @@ public class HydraPacket implements IHydraPacket
 		if( _CurrentBuffer.length < 8 )
 			throw new InvalidHydraPacketException("Packet is not a valid hydra packet");
 		
-		_Version  = ByteConverter.fromByteArray( _CurrentBuffer, 0 );
-		_PluginID = ByteConverter.fromByteArray( _CurrentBuffer, 8 );
+		_Version  = LongConverter.fromByteArray( _CurrentBuffer, 0 );
+		_PluginID = LongConverter.fromByteArray( _CurrentBuffer, 8 );
 			
 		if( _CurrentBuffer.length > 16 )
-			_InstanceID = ByteConverter.fromByteArray( _CurrentBuffer, 16 );
+			_InstanceID = LongConverter.fromByteArray( _CurrentBuffer, 16 );
 	}
 	
 	protected void appendData( byte[] dataToAppend ) 

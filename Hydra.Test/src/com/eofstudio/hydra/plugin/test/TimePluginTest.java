@@ -8,7 +8,7 @@ import java.net.URL;
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
 import com.eofstudio.hydra.core.IHydraManager;
 import com.eofstudio.hydra.core.Standard.HydraManager;
-import com.eofstudio.utils.conversion.byteArray.ByteConverter;
+import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
 import junit.framework.TestCase;
 
@@ -173,7 +173,7 @@ public class TimePluginTest extends TestCase
 				}
 			}
 			
-			instanceID =  ByteConverter.fromByteArray( data, 0 );		
+			instanceID =  LongConverter.fromByteArray( data, 0 );		
 
 			assertTrue( data.length > 8 );
 			assertTrue( instanceID != Long.MIN_VALUE );

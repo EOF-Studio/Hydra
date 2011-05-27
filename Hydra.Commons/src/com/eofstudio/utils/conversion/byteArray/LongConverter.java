@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ByteConverter 
+public class LongConverter 
 {
 	public static byte[] toByteArray( long value ) throws IOException 
 	{

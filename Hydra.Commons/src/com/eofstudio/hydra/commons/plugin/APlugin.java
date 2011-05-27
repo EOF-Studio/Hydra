@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.eofstudio.utils.conversion.byteArray.ByteConverter;
+import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
 public abstract class APlugin implements IPlugin
 {
@@ -42,7 +42,7 @@ public abstract class APlugin implements IPlugin
 	public void addConnection( IHydraPacket packet ) throws IOException 
 	{
 		_ActiveConnections.add( packet );
-		SendResponse( packet.getSocket(), ByteConverter.toByteArray( packet.getInstanceID() ) );
+		SendResponse( packet.getSocket(), LongConverter.toByteArray( packet.getInstanceID() ) );
 	}
 
 	protected void SendResponse( Socket socket, byte[] data ) 
