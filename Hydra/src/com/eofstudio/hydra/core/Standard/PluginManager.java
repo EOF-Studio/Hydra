@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
+import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
 import com.eofstudio.hydra.core.IPluginManager;
 import com.eofstudio.hydra.core.IPluginSettings;
@@ -44,7 +44,7 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException
+	public void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException
 	{
 		if( !new File( path.getFile() ).exists() )
 			throw new FileNotFoundException();
@@ -56,10 +56,10 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPlugin
+	public void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPluginException
 	{
 		if( !classIsPlugin( plugin ) )
-			throw new ClassNotAHydraPlugin( String.format( "%1s isn't a valid hydra plugin", plugin.getName() ) );
+			throw new ClassNotAHydraPluginException( String.format( "%1s isn't a valid hydra plugin", plugin.getName() ) );
 		
 		// TODO: Add more settings to the plugin, how many are allowed to run at one time, etc.
 		_InstalledPlugins.put( pluginID, new PluginSettings( plugin, pluginID ) );

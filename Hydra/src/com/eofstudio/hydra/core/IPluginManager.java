@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
-import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
+import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
 
 public interface IPluginManager
@@ -15,17 +15,31 @@ public interface IPluginManager
 	Iterator<IPluginSettings> getPluginSettings();
 	Iterator<IPlugin> getPluginInstance(  );
 	
-	
 	/**
 	 * Loads all IPlugins from the Jar file
 	 * @param path is path to the Jar file to look through
 	 * @throws MalformedURLException 
 	 * @throws ClassNotFoundException 
-	 * @throws ClassNotAHydraPlugin 
+	 * @throws ClassNotAHydraPluginException 
 	 * @throws FileNotFoundException 
 	 */
-	void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPlugin, FileNotFoundException;
+	void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException;
 	
-	void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPlugin;
+	/**
+	 * Load a particular plugin
+	 * @param plugin, the type of the plugin to load
+	 * @param pluginID, the ID of the plugin to load
+	 * @throws ClassNotAHydraPluginException
+	 */
+	void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPluginException;
+	
+	/**
+	 * Instanciate a plugin from plugin settings
+	 * @param settings
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	long instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException;
 }

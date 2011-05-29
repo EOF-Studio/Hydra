@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 
-import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPlugin;
+import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.core.IHydraManager;
 import com.eofstudio.hydra.core.Standard.HydraManager;
 import com.eofstudio.utils.conversion.byteArray.LongConverter;
@@ -36,7 +36,7 @@ public class TimePluginTest extends TestCase
 			
 			assertTrue(false);
 		} 
-		catch( ClassNotAHydraPlugin e ) 
+		catch( ClassNotAHydraPluginException e ) 
 		{
 			e.printStackTrace();
 			
@@ -69,7 +69,7 @@ public class TimePluginTest extends TestCase
 			
 			assertTrue(false);
 		} 
-		catch( ClassNotAHydraPlugin e ) 
+		catch( ClassNotAHydraPluginException e ) 
 		{
 			assertTrue(true);
 		}
@@ -102,7 +102,7 @@ public class TimePluginTest extends TestCase
 		{
 			assertTrue(true);
 		} 
-		catch( ClassNotAHydraPlugin e ) 
+		catch( ClassNotAHydraPluginException e ) 
 		{
 			e.printStackTrace();
 			
@@ -190,7 +190,7 @@ public class TimePluginTest extends TestCase
 			
 			assertTrue(false);
 		} 
-		catch( ClassNotAHydraPlugin e ) 
+		catch( ClassNotAHydraPluginException e ) 
 		{
 			e.printStackTrace();
 			
