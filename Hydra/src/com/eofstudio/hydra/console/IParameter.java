@@ -1,7 +1,6 @@
 package com.eofstudio.hydra.console;
 
-public interface IParameter 
+public interface IParameter <T extends Enum<?>>
 {
-	public Commands getKey();
-	public <T> T    getValue();
+	public T getKey();
 }

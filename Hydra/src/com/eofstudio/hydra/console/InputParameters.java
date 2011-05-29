@@ -1,7 +1,7 @@
 package com.eofstudio.hydra.console;
 
 
-public enum Commands
+public enum InputParameters
 {
 	port
 }
