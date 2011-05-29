@@ -43,27 +43,9 @@ public class Program extends AProgram
 	{
 		while( true )
 		{
+			ICommand command = WaitForInput();
+			
 			DrawMenu();
-
-			switch( WaitForInput() )
-			{
-				case 0:
-					System.out.println( 0 );
-					break;
-				case 1:
-					System.out.println( 1 );
-					break;
-				case 2:
-					ShowErrorLog();
-					break;
-				case 9:
-					System.out.println( "Hydra is shutting down" );
-					_Hydra.stop( true );
-					return;
-				default:
-					System.out.println( -1 );
-					break;
-			}
 		}
 	}
 
@@ -72,7 +54,7 @@ public class Program extends AProgram
 		// TODO: Start listening for errors
 	}
 
-	private int WaitForInput()
+	private ICommand WaitForInput()
 	{
 		try
 		{
@@ -91,27 +73,9 @@ public class Program extends AProgram
 
 	private void DrawMenu()
 	{
-		ClearConsole();
-		
-		System.out.println( "*******************************" );
-		System.out.println( "*******************************" );
-		System.out.println( "**       OCTOPUS AGENT       **" );
-		System.out.println( "*******************************" );
-		System.out.println( "** 0. Installed Plugins      **" );
-		System.out.println( "** 1. Current Instances      **" );
-		System.out.println( "** 2. Error Log              **" );
-		System.out.println( "**                           **" );
-		System.out.println( "** 9. Exit                   **" );
-		System.out.println( "*******************************" );
-		System.out.println( "*******************************" );
-	}
-
-	private void ClearConsole()
-	{
-		// TODO: Temporary hack to clear the console, should be replaced with a proper console implementation when there is time
-		System.out.println( "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-				            "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-				            "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-				            "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" );
+		System.out.println( "plugins:\t\t\tOutputs a list of the installed plugins." );
+		System.out.println( "instances:\t\t\tOutput a list of the current instances" );
+		System.out.println( "log (error|info|debug|off):\tOutput logging information based on the log level, default is 'error'" );
+		System.out.println( "exit:\t\t\t\tExit Hydra" );
 	}
 }

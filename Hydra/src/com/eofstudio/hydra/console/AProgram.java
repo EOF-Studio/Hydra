@@ -30,7 +30,7 @@ public abstract class AProgram
 			
 			
 			
-			parameters.add( new Parameter( Commands.valueOf( key.substring( 1 ).toLowerCase() ), value ) );
+			parameters.add( new Parameter( InputParameters.valueOf( key.substring( 1 ).toLowerCase() ), value ) );
 		}
 		
 		return parameters;
