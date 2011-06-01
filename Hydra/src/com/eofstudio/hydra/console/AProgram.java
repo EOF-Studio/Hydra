@@ -10,9 +10,9 @@ public abstract class AProgram
 		throw new IllegalArgumentException( String.format( message, input ) );
 	}
 	
-	protected List<IParameter> ExtractParameters( String[] args )
+	protected List<IKeyValuesPair> ExtractParameters( String[] args )
 	{
-		List<IParameter> parameters = new ArrayList<IParameter>();
+		List<IKeyValuesPair> parameters = new ArrayList<IKeyValuesPair>();
 		
 		for( int i = 0; i < args.length; i++ )
 		{

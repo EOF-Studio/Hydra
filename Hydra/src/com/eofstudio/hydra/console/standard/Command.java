@@ -9,6 +9,8 @@ public class Command implements IKeyValuesPair<Commands,String>
 
 	public Command( String commandLine ) 
 	{		
+		commandLine = commandLine.toLowerCase();
+		
 		// TODO: Error handling, for incorrect commands
 		if( commandLine.contentEquals( " " ) )
 		{

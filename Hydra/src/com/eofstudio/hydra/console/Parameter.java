@@ -1,23 +1,32 @@
 package com.eofstudio.hydra.console;
 
 
-public class Parameter <T extends Enum<?>> implements IParameter 
+public class Parameter implements IKeyValuesPair<InputParameters,String>
 {
-	private T _Key;
-	private Object _Value;
+	private InputParameters _Key;
+	private String[] _Value;
 	
-	public Parameter( T key )
+	public Parameter( InputParameters key )
 	{
 		_Key   = key ;
 		_Value = null;
 	}
 	
-	public Parameter( T key, Object value )
+	public Parameter( InputParameters key, String... value )
 	{
 		_Key   = key ;
 		_Value = value;
 	}
 
+	@Override
+	public InputParameters getKey() 
+	{
+		return _Key;
+	}
 
-
+	@Override
+	public String[] getValue() 
+	{
+		return _Value;
+	}
 }

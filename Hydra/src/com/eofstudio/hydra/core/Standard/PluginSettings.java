@@ -18,4 +18,9 @@ public class PluginSettings implements IPluginSettings
 		_ClassDefinition = classDefinition;
 		_PluginID        = pluginID;
 	}
+	
+	public String toString()
+	{
+		return String.format( "%1d\t\t%2s", getPluginID(), getClassDefinition().getName() ); 
+	}
 }
