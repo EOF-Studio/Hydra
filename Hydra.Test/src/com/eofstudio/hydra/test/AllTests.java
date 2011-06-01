@@ -15,6 +15,7 @@ public class AllTests {
 		suite.addTestSuite( HydraManagerTest.class );
 		suite.addTestSuite( SocketListenerTest.class );
 		suite.addTestSuite( ConnectionHandlerTest.class );
+		suite.addTestSuite( PluginSettingsTest.class );
 		suite.addTestSuite( TimePluginTest.class );
 		suite.addTestSuite( APluginTest.class );
 		
