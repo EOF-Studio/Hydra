@@ -10,6 +10,4 @@ public interface IHydraManager
 	boolean getIsRunning();
 	ISocketListener getSocketListener();
 	IPluginManager getPluginManager();
-	void setLogLevel( LogLevel logLevel );
-	LogLevel getLogLevel();
 }

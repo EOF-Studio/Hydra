@@ -63,6 +63,6 @@ public abstract class APlugin implements IPlugin
 	
 	public String toString()
 	{
-		return String.format( "%019d %60s %9d", getInstanceID(), getClass().getName(), getActiveConnections().size() ); 
+		return String.format( " %019d %60s %13d", getInstanceID(), getClass().getName(), getActiveConnections().size() ); 
 	}
 }

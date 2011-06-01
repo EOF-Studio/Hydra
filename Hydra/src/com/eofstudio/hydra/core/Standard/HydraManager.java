@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.log4j.LogManager;
+
+import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
 import com.eofstudio.hydra.core.*;
 
@@ -19,16 +22,10 @@ public class HydraManager implements IHydraManager, Observer
 {
 	private IPluginManager  _PluginManager  = new PluginManager();
 	private ISocketListener _SocketListener = new SocketListener();
-	private LogLevel        _LogLevel       = LogLevel.error;
 	
 	public boolean getIsRunning() { return _SocketListener.getIsRunning();	}
 	public ISocketListener getSocketListener() { return _SocketListener; }
 	public IPluginManager  getPluginManager() { return _PluginManager; }
-	
-	@Override
-	public void setLogLevel(LogLevel logLevel) { _LogLevel = logLevel; }
-	@Override
-	public LogLevel getLogLevel() { return _LogLevel; }
 	
 	public HydraManager( boolean isAutoStartEnabled ) throws IOException
 	{
@@ -70,6 +67,7 @@ public class HydraManager implements IHydraManager, Observer
 		{
 			_SocketListener.stop( isBlocking );
 			_SocketListener.deleteObserver( this );
+			LogManager.shutdown();
 		}
 		catch( IOException e )
 		{

@@ -4,13 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.Level;
+
+import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
 import com.eofstudio.hydra.console.AProgram;
 import com.eofstudio.hydra.console.IKeyValuesPair;
 import com.eofstudio.hydra.console.InputParameters;
 import com.eofstudio.hydra.core.IHydraManager;
 import com.eofstudio.hydra.core.IPluginSettings;
-import com.eofstudio.hydra.core.LogLevel;
 import com.eofstudio.hydra.core.Standard.HydraManager;
 
 public class Program extends AProgram
@@ -52,7 +54,6 @@ public class Program extends AProgram
 		{
 			IKeyValuesPair<Commands,String> command = waitForInput();
 			
-			// TODO: Based on input, execute command
 			switch( command.getKey() )
 			{
 				case menu:
@@ -79,16 +80,30 @@ public class Program extends AProgram
 
 	private void changeLogLevel( IKeyValuesPair<Commands,String> command ) 
 	{
-		LogLevel logLevel = LogLevel.valueOf( command.getValue()[0] );
+		Level logLevel = convertStringToLevel( command.getValue()[0] );
 		
-		System.out.printf( "Changing log level from %1s to %2s\n", _Hydra.getLogLevel(), logLevel );
+		System.out.printf( "Changing log level from %1s to %2s\n", HydraLog.Log.getLevel(), logLevel );
 		
-		_Hydra.setLogLevel( logLevel );
+		HydraLog.Log.setLevel( logLevel );
+	}
+
+	private Level convertStringToLevel( String level ) 
+	{
+		if( level.equals( "info" ) )
+			return Level.INFO;
+		
+		if( level.equals( "debug" ) )
+			return Level.DEBUG;
+		
+		if( level.equals( "error" ) )
+			return Level.ERROR;
+		
+		return Level.OFF;
 	}
 
 	private void showInstances() 
 	{
-		System.out.println( "Insrance ID\tName" ); 
+		System.out.println( "[      Plugin ID      |                             Name                           | # Connections ]" ); 
 		
 		while( _Hydra.getPluginManager().getPluginInstance().hasNext() )
 		{
@@ -100,7 +115,7 @@ public class Program extends AProgram
 
 	private void showPlugins() 
 	{
-		System.out.println( "Plugin ID\tName" ); 
+		System.out.println( "[    Instance ID     |                          Name                             ]" ); 
 		
 		while( _Hydra.getPluginManager().getPluginSettings().hasNext() )
 		{
@@ -119,11 +134,6 @@ public class Program extends AProgram
 		_IsRunning = false;
 		
 		System.out.println("Hydra has shut down (" + (System.currentTimeMillis() - start) + "ms)");
-	}
-
-	private void showErrorLog()
-	{
-		// TODO: Start listening for errors
 	}
 
 	private IKeyValuesPair<Commands,String> waitForInput()
