@@ -72,7 +72,7 @@ public class HydraManager implements IHydraManager, Observer
 		catch( IOException e )
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			HydraLog.Log.error( e.getMessage() );
 		}
 	}
 
