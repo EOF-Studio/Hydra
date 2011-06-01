@@ -12,6 +12,6 @@ public class PluginSettingsTest extends TestCase
 	{
 		IPluginSettings settings = new PluginSettings( MockPlugin.class, 999 );
 
-		assertEquals("                999          com.eofstudio.hydra.commons.plugin.test.MockPlugin", settings.toString() );
+		assertEquals("                 999          com.eofstudio.hydra.commons.plugin.test.MockPlugin", settings.toString() );
 	}
 }
