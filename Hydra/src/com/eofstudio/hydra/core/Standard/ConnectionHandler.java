@@ -63,6 +63,8 @@ public class ConnectionHandler extends Observable implements IConnectionHandler,
 	@Override
 	public void newConnection( Socket socket )
 	{
+		HydraLog.Log.debug( "New Connection attempt" );
+		
 		synchronized( sockets )
 		{
 			sockets.add( socket );

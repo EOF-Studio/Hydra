@@ -18,8 +18,8 @@ public class HydraLog
 		{
 			Log = Logger.getLogger( "Hydra" );
 			
-			Log.addAppender( new ConsoleAppender( new PatternLayout( "%d{yyyy.MM.dd HH:mm:ss,SSS} [%p] %m" ) ) );
-			Log.addAppender( new FileAppender(    new PatternLayout( "%d{yyyy.MM.dd HH:mm:ss,SSS} [%p] %m" ), "hydra.log" ) );
+			Log.addAppender( new ConsoleAppender( new PatternLayout( "%d{yyyy.MM.dd HH:mm:ss,SSS} [%p] %m%n" ) ) );
+			Log.addAppender( new FileAppender(    new PatternLayout( "%d{yyyy.MM.dd HH:mm:ss,SSS} [%p] %m%n" ), "hydra.log" ) );
 			
 			Log.setLevel( Level.ERROR );
 		} 

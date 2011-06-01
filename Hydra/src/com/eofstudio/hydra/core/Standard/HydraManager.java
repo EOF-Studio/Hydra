@@ -67,7 +67,6 @@ public class HydraManager implements IHydraManager, Observer
 		{
 			_SocketListener.stop( isBlocking );
 			_SocketListener.deleteObserver( this );
-			LogManager.shutdown();
 		}
 		catch( IOException e )
 		{
