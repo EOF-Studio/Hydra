@@ -88,26 +88,31 @@ public class HydraManager implements IHydraManager, Observer
 			else if( packet.getPluginID() != Long.MIN_VALUE )
 				PassPacketToNewPluginInstance( packet );
 			else
-				System.err.println( "PluginID and InstanceID was invalid" );
+			{
+				HydraLog.Log.error( String.format( "PluginID and InstanceID was invalid! PluginID: %s, InstanceID: %s", packet.getPluginID(), packet.getInstanceID() ));
+
+				// TODO: Send message back to client, with an error code
+			}
 		} 
 		catch( ClassNotFoundException e ) 
 		{
 			// TODO Actual exception handling
-			e.printStackTrace();
+			HydraLog.Log.error( e.getMessage() );
 		} 
 		catch( InstantiationException e ) 
 		{
 			// TODO Actual exception handling
-			e.printStackTrace();
+			HydraLog.Log.error( e.getMessage() );
 		} 
 		catch( IllegalAccessException e ) 
 		{
 			// TODO Actual exception handling
-			e.printStackTrace();
-		} catch (IOException e) 
+			HydraLog.Log.error( e.getMessage() );
+		} 
+		catch (IOException e) 
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			HydraLog.Log.error( e.getMessage() );
 		}
 	}
 	
