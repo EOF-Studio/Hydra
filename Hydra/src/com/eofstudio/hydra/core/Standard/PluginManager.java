@@ -95,14 +95,12 @@ public class PluginManager implements IPluginManager
 	public long instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
 		IPlugin plugin     = (IPlugin) settings.getClassDefinition().newInstance();
-		Random  random     = new Random();
-		long    instanceID = random.nextLong();
 		
 		synchronized( _PluginInstances ) 
 		{
-			_PluginInstances.put( instanceID, plugin );
+			_PluginInstances.put( plugin.getInstanceID(), plugin );
 		}
 		
-		return instanceID;
+		return plugin.getInstanceID();
 	}
 }

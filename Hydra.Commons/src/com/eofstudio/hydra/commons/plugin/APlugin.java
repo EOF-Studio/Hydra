@@ -3,13 +3,14 @@ package com.eofstudio.hydra.commons.plugin;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
 public abstract class APlugin implements IPlugin
 {
 	private ArrayList<IHydraPacket> _ActiveConnections;
-	private int                     _InstanceID;
+	private long                    _InstanceID;
 	private Thread                  _Thread;
 	
 	public APlugin( )
@@ -17,6 +18,7 @@ public abstract class APlugin implements IPlugin
 		
 		_ActiveConnections = new ArrayList<IHydraPacket>();
 		_Thread            = new Thread( this );
+		_InstanceID        = new Random().nextLong();
 		
 		_Thread.start();
 	}
@@ -27,7 +29,7 @@ public abstract class APlugin implements IPlugin
 	}
 	
 	@Override
-	public int getInstanceID() 
+	public long getInstanceID() 
 	{
 		return _InstanceID;
 	}
@@ -57,5 +59,10 @@ public abstract class APlugin implements IPlugin
 			// TODO Handle lost connections
 			e.printStackTrace();
 		}
+	}
+	
+	public String toString()
+	{
+		return String.format( "%019d %60s %9d", getInstanceID(), getClass().getName(), getActiveConnections().size() ); 
 	}
 }

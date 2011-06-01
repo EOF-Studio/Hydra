@@ -3,6 +3,7 @@ package com.eofstudio.hydra.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.eofstudio.hydra.Standard.test.*;
+import com.eofstudio.hydra.commons.plugin.test.APluginTest;
 import com.eofstudio.hydra.plugin.test.TimePluginTest;
 
 public class AllTests {
@@ -15,6 +16,7 @@ public class AllTests {
 		suite.addTestSuite( SocketListenerTest.class );
 		suite.addTestSuite( ConnectionHandlerTest.class );
 		suite.addTestSuite( TimePluginTest.class );
+		suite.addTestSuite( APluginTest.class );
 		
 		//$JUnit-END$
 		return suite;

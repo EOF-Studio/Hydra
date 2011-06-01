@@ -12,7 +12,7 @@ public class Command implements IKeyValuesPair<Commands,String>
 		commandLine = commandLine.toLowerCase();
 		
 		// TODO: Error handling, for incorrect commands
-		if( commandLine.contentEquals( " " ) )
+		if( commandLine.contains( " " ) )
 		{
 			String[] inputArguments = commandLine.split( " " );
 			

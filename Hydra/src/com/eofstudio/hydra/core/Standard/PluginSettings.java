@@ -21,6 +21,6 @@ public class PluginSettings implements IPluginSettings
 	
 	public String toString()
 	{
-		return String.format( "%1d\t\t%2s", getPluginID(), getClassDefinition().getName() ); 
+		return String.format( "%119d\t\t%2s\n", getPluginID(), getClassDefinition().getName() ); 
 	}
 }

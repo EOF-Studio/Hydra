@@ -8,7 +8,7 @@ import com.eofstudio.hydra.commons.plugin.APlugin;
 public class TimePlugin extends APlugin 
 {
 	@Override
-	public int getPluginID() 
+	public long getPluginID() 
 	{
 		return 1;
 	}

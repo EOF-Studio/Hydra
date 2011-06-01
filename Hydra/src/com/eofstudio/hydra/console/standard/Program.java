@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.eofstudio.hydra.commons.plugin.IPlugin;
 import com.eofstudio.hydra.console.AProgram;
 import com.eofstudio.hydra.console.IKeyValuesPair;
 import com.eofstudio.hydra.console.InputParameters;
 import com.eofstudio.hydra.core.IHydraManager;
 import com.eofstudio.hydra.core.IPluginSettings;
+import com.eofstudio.hydra.core.LogLevel;
 import com.eofstudio.hydra.core.Standard.HydraManager;
 
 public class Program extends AProgram
@@ -57,7 +59,13 @@ public class Program extends AProgram
 					drawMenu();
 					break;
 				case plugins:
-					plugins();
+					showPlugins();
+					break;
+				case instances:
+					showInstances();
+					break;
+				case log:
+					changeLogLevel( command );
 					break;
 				case exit:
 					exit();
@@ -69,7 +77,28 @@ public class Program extends AProgram
 		}
 	}
 
-	private void plugins() 
+	private void changeLogLevel( IKeyValuesPair<Commands,String> command ) 
+	{
+		LogLevel logLevel = LogLevel.valueOf( command.getValue()[0] );
+		
+		System.out.printf( "Changing log level from %1s to %2s\n", _Hydra.getLogLevel(), logLevel );
+		
+		_Hydra.setLogLevel( logLevel );
+	}
+
+	private void showInstances() 
+	{
+		System.out.println( "Insrance ID\tName" ); 
+		
+		while( _Hydra.getPluginManager().getPluginInstance().hasNext() )
+		{
+			IPlugin instance = _Hydra.getPluginManager().getPluginInstance().next();
+			
+			System.out.println( instance.toString() );
+		}
+	}
+
+	private void showPlugins() 
 	{
 		System.out.println( "Plugin ID\tName" ); 
 		
