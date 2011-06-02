@@ -10,7 +10,7 @@ public class APluginTest extends TestCase
 	{
 		APlugin plugin = new MockPlugin();
 		
-		assertEquals( String.format( " %019d", plugin.getInstanceID() ) + "           com.eofstudio.hydra.commons.plugin.test.MockPlugin             0", plugin.toString() );
+		assertEquals( String.format( " %12s", Long.toHexString( plugin.getInstanceID() ) ) + "           com.eofstudio.hydra.commons.plugin.test.MockPlugin             0", plugin.toString() );
 	}
 }
 

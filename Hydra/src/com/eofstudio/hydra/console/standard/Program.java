@@ -3,9 +3,12 @@ package com.eofstudio.hydra.console.standard;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Iterator;
 
 import org.apache.log4j.Level;
 
+import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
 import com.eofstudio.hydra.console.AProgram;
@@ -41,6 +44,16 @@ public class Program extends AProgram
 		}
 		
 		program._Hydra.start( port, 50 );
+		try {
+			program._Hydra.getPluginManager().loadPlugin( new URL("file:../lib/Hydra.Test.jar"), "com.eofstudio.hydra.plugin.test.TimePlugin", 1 );
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotAHydraPluginException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		program.menuLoop();
 		
 		Runtime.getRuntime().exit( 1 );
@@ -103,8 +116,8 @@ public class Program extends AProgram
 
 	private void showInstances() 
 	{
-		System.out.println( "[      Plugin ID      |                             Name                           | # Connections ]" ); 
-		
+		System.out.println( "[   Instance ID    |                             Name                           | # Connections ]" );
+
 		while( _Hydra.getPluginManager().getPluginInstance().hasNext() )
 		{
 			IPlugin instance = _Hydra.getPluginManager().getPluginInstance().next();
@@ -115,11 +128,12 @@ public class Program extends AProgram
 
 	private void showPlugins() 
 	{
-		System.out.println( "[    Instance ID     |                          Name                             ]" ); 
+		System.out.println( "[     Plugin ID      |                          Name                             ]" ); 
+		Iterator<IPluginSettings> ite = _Hydra.getPluginManager().getPluginSettings();
 		
-		while( _Hydra.getPluginManager().getPluginSettings().hasNext() )
+		while( ite.hasNext() )
 		{
-			IPluginSettings settings = _Hydra.getPluginManager().getPluginSettings().next();
+			IPluginSettings settings = ite.next();
 			
 			System.out.println( settings.toString() );
 		}
