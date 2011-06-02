@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface IPlugin extends Runnable
 {
-	long getPluginID();
+	String getPluginID();
 	long getInstanceID();
 	void addConnection( IHydraPacket packet ) throws IOException;
 	Thread getThread();

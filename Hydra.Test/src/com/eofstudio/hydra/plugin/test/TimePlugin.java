@@ -6,13 +6,7 @@ import java.util.Calendar;
 import com.eofstudio.hydra.commons.plugin.APlugin;
 
 public class TimePlugin extends APlugin 
-{
-	@Override
-	public long getPluginID() 
-	{
-		return 1;
-	}
-	
+{	
 	@Override
 	public void run() 
 	{

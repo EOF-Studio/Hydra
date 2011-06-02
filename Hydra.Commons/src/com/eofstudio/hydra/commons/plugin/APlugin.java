@@ -35,6 +35,12 @@ public abstract class APlugin implements IPlugin
 	}
 	
 	@Override
+	public String getPluginID() 
+	{
+		return getClass().getName();
+	}
+	
+	@Override
 	public Thread getThread() 
 	{
 		return _Thread;
