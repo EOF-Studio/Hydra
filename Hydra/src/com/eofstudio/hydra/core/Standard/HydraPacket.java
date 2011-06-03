@@ -61,8 +61,7 @@ public class HydraPacket implements IHydraPacket
 			} 
 			catch( IOException e ) 
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				HydraLog.Log.error("HydraPacket - An error occured while trying to read data from the inputStream", e);
 			}
 		}
 		
