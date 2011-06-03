@@ -5,15 +5,15 @@ import com.eofstudio.hydra.core.IPluginSettings;
 public class PluginSettings implements IPluginSettings 
 {
 	private Class<?> _ClassDefinition;
-	private long   _PluginID;
+	private String   _PluginID;
 	
 	@Override
 	public Class<?> getClassDefinition() { return _ClassDefinition; }
 
 	@Override
-	public long getPluginID() { return _PluginID; }
+	public String getPluginID() { return _PluginID; }
 	
-	public PluginSettings( Class<?> classDefinition, long pluginID ) 
+	public PluginSettings( Class<?> classDefinition, String pluginID ) 
 	{
 		_ClassDefinition = classDefinition;
 		_PluginID        = pluginID;
@@ -21,6 +21,6 @@ public class PluginSettings implements IPluginSettings
 	
 	public String toString()
 	{
-		return String.format( " %19d%60s", getPluginID(), getClassDefinition().getName() ); 
+		return String.format( " %60s", getPluginID() ); 
 	}
 }

@@ -10,8 +10,8 @@ public class PluginSettingsTest extends TestCase
 {
 	public void testShould_Get_ToString()
 	{
-		IPluginSettings settings = new PluginSettings( MockPlugin.class, 999 );
+		IPluginSettings settings = new PluginSettings( MockPlugin.class, "com.eofstudio.hydra.commons.plugin.test.MockPlugin" );
 
-		assertEquals("                 999          com.eofstudio.hydra.commons.plugin.test.MockPlugin", settings.toString() );
+		assertEquals("           com.eofstudio.hydra.commons.plugin.test.MockPlugin", settings.toString() );
 	}
 }

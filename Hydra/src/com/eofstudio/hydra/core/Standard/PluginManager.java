@@ -16,11 +16,11 @@ import com.eofstudio.hydra.core.IPluginSettings;
 
 public class PluginManager implements IPluginManager
 {
-	private Map<Long,IPluginSettings> _InstalledPlugins = new HashMap<Long, IPluginSettings>();
-	private Map<Long,IPlugin>         _PluginInstances  = new HashMap<Long, IPlugin>();
+	private Map<String,IPluginSettings> _InstalledPlugins = new HashMap<String, IPluginSettings>();
+	private Map<Long,IPlugin>           _PluginInstances  = new HashMap<Long, IPlugin>();
 	
 	@Override
-	public IPluginSettings getPluginSettings( long pluginID )
+	public IPluginSettings getPluginSettings( String pluginID )
 	{
 		return _InstalledPlugins.get( pluginID );
 	}
@@ -44,7 +44,7 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException
+	public void loadPlugin( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException
 	{
 		if( !new File( path.getFile() ).exists() )
 			throw new FileNotFoundException();
@@ -56,7 +56,7 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPluginException
+	public void loadPlugin( Class<?> plugin, String pluginID ) throws ClassNotAHydraPluginException
 	{
 		if( !classIsPlugin( plugin ) )
 			throw new ClassNotAHydraPluginException( String.format( "%1s isn't a valid hydra plugin", plugin.getName() ) );

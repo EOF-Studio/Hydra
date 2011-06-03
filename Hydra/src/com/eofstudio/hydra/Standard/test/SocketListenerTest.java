@@ -5,6 +5,7 @@ import java.net.Socket;
 
 import com.eofstudio.hydra.core.ISocketListener;
 import com.eofstudio.hydra.core.Standard.SocketListener;
+import com.eofstudio.utils.conversion.byteArray.IntConverter;
 
 import junit.framework.TestCase;
 
@@ -81,7 +82,7 @@ public class SocketListenerTest extends TestCase
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
-			socket.getOutputStream().write( new byte[]{0x00,0x00,0x0f,0x00,0x00,0x00,0x0f,0x01,0x00,0x00,0x0f,0x00,0x00,0x00,0x00,0x01,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f} );
+			socket.getOutputStream().write( getHydraPacketData() );
 			
             int retries = 40;
 			
@@ -145,7 +146,7 @@ public class SocketListenerTest extends TestCase
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
-			socket.getOutputStream().write( new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f} );
+			socket.getOutputStream().write( getHydraPacketData() );
 			
 			int retries = 40;
 			
@@ -181,7 +182,7 @@ public class SocketListenerTest extends TestCase
 			
 			assertEquals( 1, obs.packet.getVersion() );
 			assertEquals( 9187201950435737471L, obs.packet.getInstanceID() );
-			assertEquals( 1, obs.packet.getPluginID() );
+			assertEquals( "some.test.plugin.id", obs.packet.getPluginID() );
 			
 			sl.stop(true);
 		} 
@@ -193,5 +194,19 @@ public class SocketListenerTest extends TestCase
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	private byte[] getHydraPacketData() throws IOException 
+	{
+		byte[] pluginID = "some.test.plugin.id".getBytes();
+		
+		byte[] data = new byte[8 + 4 + pluginID.length + 8];
+		
+		System.arraycopy( new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01}, 0, data, 0, 8);
+		System.arraycopy( IntConverter.toByteArray( pluginID.length ), 0, data, 8, 4);
+		System.arraycopy( pluginID, 0, data, 8 + 4, pluginID.length);
+		System.arraycopy( new byte[]{0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f,0x7f}, 0, data, 8 + 4 + pluginID.length, 8);
+		
+		return data;
 	}
 }

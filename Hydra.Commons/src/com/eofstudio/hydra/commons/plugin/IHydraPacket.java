@@ -20,7 +20,7 @@ public interface IHydraPacket
 	 * 
 	 * @return default value is Long.MIN_VALUE
 	 */
-	long getPluginID();
+	String getPluginID();
 	
 	/**
 	 * The instance ID the current packet is mean for.

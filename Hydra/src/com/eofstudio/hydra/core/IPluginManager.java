@@ -10,7 +10,7 @@ import com.eofstudio.hydra.commons.plugin.IPlugin;
 
 public interface IPluginManager
 {
-	IPluginSettings getPluginSettings( long pluginID );
+	IPluginSettings getPluginSettings( String pluginID );
 	IPlugin getPluginInstance( long instanceID );
 	Iterator<IPluginSettings> getPluginSettings();
 	Iterator<IPlugin> getPluginInstance(  );
@@ -23,7 +23,7 @@ public interface IPluginManager
 	 * @throws ClassNotAHydraPluginException 
 	 * @throws FileNotFoundException 
 	 */
-	void loadPlugin( URL path, String classname, long pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException;
+	void loadPlugin( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException;
 	
 	/**
 	 * Load a particular plugin
@@ -31,7 +31,7 @@ public interface IPluginManager
 	 * @param pluginID, the ID of the plugin to load
 	 * @throws ClassNotAHydraPluginException
 	 */
-	void loadPlugin( Class<?> plugin, long pluginID ) throws ClassNotAHydraPluginException;
+	void loadPlugin( Class<?> plugin, String pluginID ) throws ClassNotAHydraPluginException;
 	
 	/**
 	 * Instanciate a plugin from plugin settings

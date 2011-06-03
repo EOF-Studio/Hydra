@@ -5,13 +5,14 @@ import java.net.Socket;
 
 import com.eofstudio.hydra.commons.exceptions.InvalidHydraPacketException;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
+import com.eofstudio.utils.conversion.byteArray.IntConverter;
 import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
 public class HydraPacket implements IHydraPacket 
 {
 	private byte[] _CurrentBuffer = new byte[0];
 	private long   _Version       = Long.MIN_VALUE;
-	private long   _PluginID      = Long.MIN_VALUE;
+	private String _PluginID      = null;
 	private long   _InstanceID    = Long.MIN_VALUE;
 	private Socket _Socket		  = null;
 	
@@ -22,7 +23,7 @@ public class HydraPacket implements IHydraPacket
 	public long getVersion(){ return _Version; }
 	
 	@Override
-	public long getPluginID(){ return _PluginID; }
+	public String getPluginID(){ return _PluginID; }
 	
 	@Override
 	public long getInstanceID(){ return _InstanceID; }
@@ -74,12 +75,15 @@ public class HydraPacket implements IHydraPacket
 			throw new InvalidHydraPacketException("Packet is not a valid hydra packet");
 		
 		_Version  = LongConverter.fromByteArray( _CurrentBuffer, 0 );
-		_PluginID = LongConverter.fromByteArray( _CurrentBuffer, 8 );
+		
+		int length = IntConverter.fromByteArray( _CurrentBuffer, 8 );
+		
+		_PluginID = new String( data, 12, length );
 			
-		if( _CurrentBuffer.length > 16 )
-			_InstanceID = LongConverter.fromByteArray( _CurrentBuffer, 16 );
+		if( _CurrentBuffer.length > 12 + length )
+			_InstanceID = LongConverter.fromByteArray( _CurrentBuffer, 12 + length );
 	}
-	
+
 	protected void appendData( byte[] dataToAppend ) 
 	{
 		byte[] newArray = new byte[ _CurrentBuffer.length + dataToAppend.length ];

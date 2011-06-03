@@ -84,7 +84,7 @@ public class HydraManager implements IHydraManager, Observer
 			
 			if( packet.getInstanceID() != Long.MIN_VALUE )
 				PassConnectionToInstance( packet );
-			else if( packet.getPluginID() != Long.MIN_VALUE )
+			else if( packet.getPluginID() != null )
 				PassPacketToNewPluginInstance( packet );
 			else
 			{

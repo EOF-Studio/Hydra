@@ -8,6 +8,7 @@ import java.net.URL;
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.core.IHydraManager;
 import com.eofstudio.hydra.core.Standard.HydraManager;
+import com.eofstudio.utils.conversion.byteArray.IntConverter;
 import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
 import junit.framework.TestCase;
@@ -22,7 +23,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", 1 );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
 		} 
 		catch( IOException e ) 
 		{
@@ -55,7 +56,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", 1 );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "com.eofstudio.hydra.plugin.test.TimePluginTest" );
 		} 
 		catch( IOException e ) 
 		{
@@ -86,7 +87,7 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:../lib/MISSING.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", 1 );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/MISSING.jar" ), "com.eofstudio.hydra.plugin.test.TimePluginTest", "com.eofstudio.hydra.plugin.test.TimePluginTest" );
 		} 
 		catch( FileNotFoundException e ) 
 		{
@@ -121,21 +122,18 @@ public class TimePluginTest extends TestCase
 		{
 			manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", 1 );
+			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
-			socket.getOutputStream().write( new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01} );
+			socket.getOutputStream().write( getHydraPacketData() );
 			
 			int retries = 40;
 			
 			while( true )
 			{
 				if( socket.getInputStream().available() != 0 )
-				{
-
 					break;
-				}
 				
 				Thread.sleep( 5 );
 				
@@ -205,5 +203,18 @@ public class TimePluginTest extends TestCase
 		
 		if( manager != null )
 			manager.stop(true);
+	}
+	
+	private byte[] getHydraPacketData() throws IOException 
+	{
+		byte[] pluginID = "com.eofstudio.hydra.plugin.test.TimePlugin".getBytes();
+		
+		byte[] data = new byte[8 + 4 + pluginID.length];
+		
+		System.arraycopy( new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01}, 0, data, 0, 8);
+		System.arraycopy( IntConverter.toByteArray( pluginID.length ), 0, data, 8, 4);
+		System.arraycopy( pluginID, 0, data, 8 + 4, pluginID.length);
+		
+		return data;
 	}
 }
