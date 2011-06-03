@@ -9,8 +9,6 @@ public class Command implements IKeyValuesPair<Commands,String>
 
 	public Command( String commandLine ) 
 	{		
-		commandLine = commandLine.toLowerCase();
-		
 		if( commandLine.contains( " " ) )
 		{
 			String[] inputArguments = commandLine.split( " " );
@@ -28,7 +26,7 @@ public class Command implements IKeyValuesPair<Commands,String>
 	{
 		try
 		{
-			return Commands.valueOf( key );
+			return Commands.valueOf( key.toLowerCase() );
 		}
 		catch( IllegalArgumentException e )
 		{

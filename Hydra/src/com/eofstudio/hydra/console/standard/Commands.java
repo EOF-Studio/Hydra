@@ -3,8 +3,8 @@ package com.eofstudio.hydra.console.standard;
 public enum Commands 
 {
 	menu,
-	plugins,
-	instances,
+	plugin,
+	instance,
 	log,
 	exit,
 	unknown

@@ -1,8 +1,10 @@
 package com.eofstudio.hydra.console.standard;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -44,15 +46,15 @@ public class Program extends AProgram
 		}
 		
 		program._Hydra.start( port, 50 );
-		try {
-			program._Hydra.getPluginManager().loadPlugin( new URL("file:hydra_lib/Hydra.Test.jar"), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotAHydraPluginException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			program._Hydra.getPluginManager().loadPlugin( new URL("file:../lib/Hydra.Test.jar"), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ClassNotAHydraPluginException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		program.menuLoop();
 		
@@ -65,17 +67,17 @@ public class Program extends AProgram
 		
 		while( _IsRunning )
 		{
-			IKeyValuesPair<Commands,String> command = waitForInput();
+			Command command = waitForInput();
 			
 			switch( command.getKey() )
 			{
 				case menu:
 					drawMenu();
 					break;
-				case plugins:
-					showPlugins();
+				case plugin:
+					handlePlugin( command );
 					break;
-				case instances:
+				case instance:
 					showInstances();
 					break;
 				case log:
@@ -91,6 +93,60 @@ public class Program extends AProgram
 					break;
 			}
 			
+		}
+	}
+
+	private void handlePlugin( Command command ) 
+	{
+		if( command.getValue()  == null )
+			showPluginCommands();
+		else
+		if( command.getValue()[0].equals( "-ls" ) )
+			showPlugins();
+		else
+		if( command.getValue()[0].equals( "-p" ) )
+			loadPlugin( command );
+		else
+			showPluginCommands();
+	}
+
+	private void showPluginCommands() 
+	{
+		System.out.println( "The load command take the forllowing parameters" );
+		System.out.println( "-ls: will list all the loaded plugins " );
+		System.out.println( "-p \"path/to/file\" \"classpath\" : this will load a plugin" );
+	}
+
+	private void loadPlugin( Command command ) 
+	{
+		if( command.getValue().length != 3 )
+			showPluginCommands();
+		else
+		{
+			try 
+			{
+				long start = System.currentTimeMillis();
+				
+				_Hydra.getPluginManager().loadPlugin( new URL( "file:" + command.getValue()[1].replace( "\"", "" ) ), command.getValue()[2].replace( "\"", "" ), command.getValue()[2].replace( "\"", "" ) );
+				
+				System.out.printf( "Plugin Loaded (%sms)%n", System.currentTimeMillis() - start );
+			} 
+			catch( FileNotFoundException e ) 
+			{
+				HydraLog.Log.error( "FileNotFoundException while loading plugin", e );
+			} 
+			catch( MalformedURLException e ) 
+			{
+				HydraLog.Log.error( "MalformedURLException while loading plugin", e );
+			} 
+			catch( ClassNotFoundException e ) 
+			{
+				HydraLog.Log.error( "ClassNotFoundException while loading plugin", e );
+			} 
+			catch( ClassNotAHydraPluginException e )
+			{
+				HydraLog.Log.error( "ClassNotAHydraPluginException while loading plugin", e );
+			} 
 		}
 	}
 
@@ -160,7 +216,7 @@ public class Program extends AProgram
 		System.out.println("Hydra has shut down (" + (System.currentTimeMillis() - start) + "ms)");
 	}
 
-	private IKeyValuesPair<Commands,String> waitForInput()
+	private Command waitForInput()
 	{
 		try
 		{
@@ -180,8 +236,8 @@ public class Program extends AProgram
 	private void drawMenu()
 	{
 		System.out.println( "menu:\t\t\t\tPrints the menu." );
-		System.out.println( "plugins:\t\t\tOutputs a list of the installed plugins." );
-		System.out.println( "instances:\t\t\tOutput a list of the current instances" );
+		System.out.println( "plugin:\t\t\tOutputs a list of the installed plugins." );
+		System.out.println( "instance:\t\t\tOutput a list of the current instances" );
 		System.out.println( "log (error|info|debug|off):\tOutput logging information based on the log level, default is 'error'" );
 		System.out.println( "exit:\t\t\t\tExit Hydra" );
 	}
