@@ -1,11 +1,14 @@
 package com.eofstudio.hydra.core.Standard;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
 import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
+import com.eofstudio.hydra.commons.plugin.IPlugin;
+import com.eofstudio.hydra.commons.plugin.IPluginSettings;
 import com.eofstudio.hydra.core.*;
 
 /**
@@ -20,6 +23,7 @@ public class HydraManager implements IHydraManager, Observer
 {
 	private IPluginManager  _PluginManager  = new PluginManager();
 	private ISocketListener _SocketListener = new SocketListener();
+	//private String          _PluginFolder   = "plugins/";
 	
 	public boolean getIsRunning() { return _SocketListener.getIsRunning();	}
 	public ISocketListener getSocketListener() { return _SocketListener; }
@@ -83,7 +87,7 @@ public class HydraManager implements IHydraManager, Observer
 			if( packet.getInstanceID() != Long.MIN_VALUE )
 				PassConnectionToInstance( packet );
 			else if( packet.getPluginID() != null )
-				PassPacketToNewPluginInstance( packet );
+				PassPacketToNewOrAvailablePluginInstance( packet );
 			else
 			{
 				HydraLog.Log.error( String.format( "PluginID and InstanceID was invalid! PluginID: %s, InstanceID: %s", packet.getPluginID(), packet.getInstanceID() ));
@@ -113,25 +117,44 @@ public class HydraManager implements IHydraManager, Observer
 		}
 	}
 	
-	private void PassPacketToNewPluginInstance( IHydraPacket packet ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException 
+	private void PassPacketToNewOrAvailablePluginInstance( IHydraPacket packet ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException 
 	{
-		IPluginSettings settings = _PluginManager.getPluginSettings( packet.getPluginID() );
+		IPluginSettings   settings = _PluginManager.getPluginSettings( packet.getPluginID() );
+		Iterator<IPlugin> iterator = getPluginManager().getPluginInstance();
 		
-		// TODO: Make sure the settings are obeyed if the plugin instance is created
+		long instanceID = Long.MIN_VALUE;
+		
+		while( iterator.hasNext() )
+		{
+			IPlugin plugin = iterator.next();
+			
+			if( !plugin.getPluginID().equals( packet.getPluginID() ) )
+				continue;
+			
+			if( plugin.getSettings().getMaxConnections() <= plugin.getCurrentConnections() )
+				continue;
+			
+			instanceID = plugin.getInstanceID();
+		}
+		
 		// TODO: Implement Execution slots akin those in Octopus.Net
 		
-		packet.setInstanceID( getPluginManager().instanciatePlugin( settings ) );
+		packet.setInstanceID( instanceID == Long.MIN_VALUE ? getPluginManager().instanciatePlugin( settings ) : instanceID );
 		PassConnectionToInstance( packet );
-
 	}
 	
 	private void PassConnectionToInstance( IHydraPacket packet ) throws IOException 
 	{
+		IPlugin plugin = _PluginManager.getPluginInstance( packet.getInstanceID() );
+		
 		// TODO: Proper exception handling
-		if( _PluginManager.getPluginInstance( packet.getInstanceID() ) == null )
+		if( plugin == null )
 			return;
 		
-		_PluginManager.getPluginInstance( packet.getInstanceID() ).addConnection( packet );
+		if( plugin.getSettings().getMaxConnections() <= plugin.getCurrentConnections() )
+			return; // TODO: Notify client that the max connections has been reached
+			
+		plugin.addConnection( packet );
 		
 		HydraLog.Log.info( String.format( "Connection established to instance %s", Long.toHexString( packet.getInstanceID() ) ));
 	}

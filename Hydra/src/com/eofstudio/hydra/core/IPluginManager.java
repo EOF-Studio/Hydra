@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
+import com.eofstudio.hydra.commons.plugin.IPluginSettings;
 
 public interface IPluginManager
 {
@@ -23,7 +24,7 @@ public interface IPluginManager
 	 * @throws ClassNotAHydraPluginException 
 	 * @throws FileNotFoundException 
 	 */
-	void loadPlugin( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException;
+	void loadPlugin( URL path, String classname, String pluginID, int maxConnections ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException;
 	
 	/**
 	 * Load a particular plugin
@@ -31,7 +32,7 @@ public interface IPluginManager
 	 * @param pluginID, the ID of the plugin to load
 	 * @throws ClassNotAHydraPluginException
 	 */
-	void loadPlugin( Class<?> plugin, String pluginID ) throws ClassNotAHydraPluginException;
+	void loadPlugin( Class<?> plugin, String pluginID, int maxConnections ) throws ClassNotAHydraPluginException;
 	
 	/**
 	 * Instanciate a plugin from plugin settings

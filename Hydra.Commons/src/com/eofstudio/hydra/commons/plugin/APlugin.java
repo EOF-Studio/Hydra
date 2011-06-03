@@ -13,6 +13,7 @@ public abstract class APlugin implements IPlugin
 	private ArrayList<IHydraPacket> _ActiveConnections;
 	private long                    _InstanceID;
 	private Thread                  _Thread;
+	private IPluginSettings         _Settings;
 	
 	public APlugin( )
 	{
@@ -27,6 +28,22 @@ public abstract class APlugin implements IPlugin
 	protected ArrayList<IHydraPacket> getActiveConnections()
 	{
 		return _ActiveConnections;
+	}
+	
+	int getNoOfCurrentConnections()
+	{
+		return _ActiveConnections.size();
+	}
+	
+	@Override
+	public IPluginSettings getSettings() 
+	{
+		return _Settings;
+	}
+	
+	public void setSettings( IPluginSettings settings ) 
+	{
+		_Settings = settings;
 	}
 	
 	@Override
@@ -70,6 +87,6 @@ public abstract class APlugin implements IPlugin
 
 	public String toString()
 	{
-		return String.format( "  %16s %60s %15d", Long.toHexString( getInstanceID() ), getClass().getName(), getActiveConnections().size() ); 
+		return String.format( "  %16s %60s %15d %15d", Long.toHexString( getInstanceID() ), getClass().getName(), getActiveConnections().size(), getSettings().getMaxConnections() ); 
 	}
 }

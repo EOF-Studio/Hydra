@@ -13,11 +13,11 @@ import org.apache.log4j.Level;
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
+import com.eofstudio.hydra.commons.plugin.IPluginSettings;
 import com.eofstudio.hydra.console.AProgram;
 import com.eofstudio.hydra.console.IKeyValuesPair;
 import com.eofstudio.hydra.console.InputParameters;
 import com.eofstudio.hydra.core.IHydraManager;
-import com.eofstudio.hydra.core.IPluginSettings;
 import com.eofstudio.hydra.core.Standard.HydraManager;
 
 public class Program extends AProgram
@@ -98,7 +98,7 @@ public class Program extends AProgram
 
 	private void handlePlugin( Command command ) 
 	{
-		if( command.getValue()  == null )
+		if( command.getValue()  == null || command.getValue().length == 0 )
 			showPluginCommands();
 		else
 		if( command.getValue()[0].equals( "-ls" ) )
@@ -114,12 +114,12 @@ public class Program extends AProgram
 	{
 		System.out.println( "The load command take the forllowing parameters" );
 		System.out.println( "-ls: will list all the loaded plugins " );
-		System.out.println( "-p \"path/to/file\" \"classpath\" : this will load a plugin" );
+		System.out.println( "-p \"path/to/file\" \"classpath\" max_number_of_connections : this will load a plugin" );
 	}
 
 	private void loadPlugin( Command command ) 
 	{
-		if( command.getValue().length != 3 )
+		if( command.getValue().length != 4 )
 			showPluginCommands();
 		else
 		{
@@ -127,7 +127,7 @@ public class Program extends AProgram
 			{
 				long start = System.currentTimeMillis();
 				
-				_Hydra.getPluginManager().loadPlugin( new URL( "file:" + command.getValue()[1].replace( "\"", "" ) ), command.getValue()[2].replace( "\"", "" ), command.getValue()[2].replace( "\"", "" ) );
+				_Hydra.getPluginManager().loadPlugin( new URL( "file:" + command.getValue()[1].replace( "\"", "" ) ), command.getValue()[2].replace( "\"", "" ), command.getValue()[2].replace( "\"", "" ), Integer.parseInt( command.getValue()[3] ) );
 				
 				System.out.printf( "Plugin Loaded (%sms)%n", System.currentTimeMillis() - start );
 			} 
@@ -180,7 +180,7 @@ public class Program extends AProgram
 
 	private void showInstances() 
 	{
-		System.out.println( "[   Instance ID    |                             Name                           | # Connections ]" );
+		System.out.println( "[   Instance ID    |                             Name                           | # Connections | Max Connections ]" );
 
 		Iterator<IPlugin> ite = _Hydra.getPluginManager().getPluginInstance();
 		
@@ -194,7 +194,7 @@ public class Program extends AProgram
 
 	private void showPlugins() 
 	{
-		System.out.println( "[                         Plugin ID                           ]" ); 
+		System.out.println( "[                         Plugin ID                            | Max Connections ]" ); 
 		Iterator<IPluginSettings> ite = _Hydra.getPluginManager().getPluginSettings();
 		
 		while( ite.hasNext() )

@@ -9,9 +9,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
+import com.eofstudio.hydra.commons.plugin.APlugin;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
+import com.eofstudio.hydra.commons.plugin.IPluginSettings;
 import com.eofstudio.hydra.core.IPluginManager;
-import com.eofstudio.hydra.core.IPluginSettings;
 
 public class PluginManager implements IPluginManager
 {
@@ -43,7 +44,7 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public void loadPlugin( URL path, String classname, String pluginID ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException
+	public void loadPlugin( URL path, String classname, String pluginID, int maxConnections ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException
 	{
 		if( !new File( path.getFile() ).exists() )
 			throw new FileNotFoundException();
@@ -51,17 +52,17 @@ public class PluginManager implements IPluginManager
 		ClassLoader classLoader = URLClassLoader.newInstance( new URL[]{path} );
 		Class<?>    clazz       = Class.forName( classname, false, classLoader );
 		
-		loadPlugin( clazz, pluginID );
+		loadPlugin( clazz, pluginID, maxConnections );
 	}
 	
 	@Override
-	public void loadPlugin( Class<?> plugin, String pluginID ) throws ClassNotAHydraPluginException
+	public void loadPlugin( Class<?> plugin, String pluginID, int maxConnections ) throws ClassNotAHydraPluginException
 	{
 		if( !classIsPlugin( plugin ) )
 			throw new ClassNotAHydraPluginException( String.format( "%1s isn't a valid hydra plugin", plugin.getName() ) );
 		
 		// TODO: Add more settings to the plugin, how many are allowed to run at one time, etc.
-		_InstalledPlugins.put( pluginID, new PluginSettings( plugin, pluginID ) );
+		_InstalledPlugins.put( pluginID, new PluginSettings( plugin, pluginID, maxConnections ) );
 	}
 	
 	/**
@@ -93,7 +94,9 @@ public class PluginManager implements IPluginManager
 	@Override
 	public long instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
-		IPlugin plugin     = (IPlugin) settings.getClassDefinition().newInstance();
+		APlugin plugin = (APlugin) settings.getClassDefinition().newInstance();
+		
+		plugin.setSettings( settings );
 		
 		synchronized( _PluginInstances ) 
 		{
