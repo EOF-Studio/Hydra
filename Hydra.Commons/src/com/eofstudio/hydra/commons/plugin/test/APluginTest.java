@@ -11,7 +11,7 @@ public class APluginTest extends TestCase
 	{
 		APlugin plugin = new MockPlugin();
 		
-		assertEquals( String.format( " %12s", Long.toHexString( plugin.getInstanceID() ) ) + "           com.eofstudio.hydra.commons.plugin.test.MockPlugin                0", plugin.toString() );
+		assertEquals( String.format( "  %16s", Long.toHexString( plugin.getInstanceID() ) ) + "           com.eofstudio.hydra.commons.plugin.test.MockPlugin               0", plugin.toString() );
 	}
 	
 	public void testShould_Get_PluginID()
