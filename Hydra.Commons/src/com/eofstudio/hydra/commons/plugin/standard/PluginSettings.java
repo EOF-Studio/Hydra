@@ -1,4 +1,4 @@
-package com.eofstudio.hydra.core.Standard;
+package com.eofstudio.hydra.commons.plugin.standard;
 
 import com.eofstudio.hydra.commons.plugin.IPluginSettings;
 

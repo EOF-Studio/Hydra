@@ -1,8 +1,8 @@
 package com.eofstudio.hydra.Standard.test;
 
 import com.eofstudio.hydra.commons.plugin.IPluginSettings;
+import com.eofstudio.hydra.commons.plugin.standard.PluginSettings;
 import com.eofstudio.hydra.commons.plugin.test.MockPlugin;
-import com.eofstudio.hydra.core.Standard.PluginSettings;
 
 import junit.framework.TestCase;
 
@@ -12,6 +12,6 @@ public class PluginSettingsTest extends TestCase
 	{
 		IPluginSettings settings = new PluginSettings( MockPlugin.class, "com.eofstudio.hydra.commons.plugin.test.MockPlugin", 1 );
 
-		assertEquals("           com.eofstudio.hydra.commons.plugin.test.MockPlugin", settings.toString() );
+		assertEquals("            com.eofstudio.hydra.commons.plugin.test.MockPlugin                 1 ", settings.toString() );
 	}
 }

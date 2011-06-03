@@ -12,6 +12,7 @@ import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.commons.plugin.APlugin;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
 import com.eofstudio.hydra.commons.plugin.IPluginSettings;
+import com.eofstudio.hydra.commons.plugin.standard.PluginSettings;
 import com.eofstudio.hydra.core.IPluginManager;
 
 public class PluginManager implements IPluginManager

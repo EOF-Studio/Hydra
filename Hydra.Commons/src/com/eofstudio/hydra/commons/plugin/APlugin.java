@@ -30,6 +30,12 @@ public abstract class APlugin implements IPlugin
 		return _ActiveConnections;
 	}
 	
+	@Override
+	public int getCurrentConnections() 
+	{
+		return _ActiveConnections.size();
+	}
+	
 	int getNoOfCurrentConnections()
 	{
 		return _ActiveConnections.size();
