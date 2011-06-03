@@ -5,24 +5,35 @@ import com.eofstudio.hydra.console.IKeyValuesPair;
 public class Command implements IKeyValuesPair<Commands,String> 
 {
 	private Commands _Key;
-	private String[]   _Value;
+	private String[] _Value;
 
 	public Command( String commandLine ) 
 	{		
 		commandLine = commandLine.toLowerCase();
 		
-		// TODO: Error handling, for incorrect commands
 		if( commandLine.contains( " " ) )
 		{
 			String[] inputArguments = commandLine.split( " " );
 			
-			_Key   = Commands.valueOf( inputArguments[0] );
+			_Key   = ParseKey( inputArguments[0] );
 			_Value = new String[ inputArguments.length -1 ];
 			
 			System.arraycopy( inputArguments, 1, _Value, 0, _Value.length );
 		}
 		else
-			_Key = Commands.valueOf( commandLine );
+			_Key = ParseKey( commandLine );
+	}
+
+	private Commands ParseKey( String key ) 
+	{
+		try
+		{
+			return Commands.valueOf( key );
+		}
+		catch( IllegalArgumentException e )
+		{
+			return Commands.unknown;
+		}
 	}
 
 	@Override

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.apache.log4j.LogManager;
-
 import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.hydra.commons.plugin.IHydraPacket;
 import com.eofstudio.hydra.core.*;

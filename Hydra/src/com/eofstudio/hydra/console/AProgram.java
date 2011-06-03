@@ -10,9 +10,9 @@ public abstract class AProgram
 		throw new IllegalArgumentException( String.format( message, input ) );
 	}
 	
-	protected List<IKeyValuesPair> ExtractParameters( String[] args )
+	protected List<Parameter> ExtractParameters( String[] args )
 	{
-		List<IKeyValuesPair> parameters = new ArrayList<IKeyValuesPair>();
+		List<Parameter> parameters = new ArrayList<Parameter>();
 		
 		for( int i = 0; i < args.length; i++ )
 		{
@@ -27,9 +27,7 @@ public abstract class AProgram
 				value = args[i + 1];
 				i++;
 			}
-			
-			
-			
+
 			parameters.add( new Parameter( InputParameters.valueOf( key.substring( 1 ).toLowerCase() ), value ) );
 		}
 		

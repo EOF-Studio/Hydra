@@ -84,11 +84,19 @@ public class Program extends AProgram
 				case exit:
 					exit();
 					break;
+				case unknown:
+					unknown();
+					break;
 				default:
 					break;
 			}
 			
 		}
+	}
+
+	private void unknown() 
+	{
+		System.out.println( "The commands wasn't recognized, type menu for a list of all available commands" );
 	}
 
 	private void changeLogLevel( IKeyValuesPair<Commands,String> command ) 
@@ -128,7 +136,7 @@ public class Program extends AProgram
 
 	private void showPlugins() 
 	{
-		System.out.println( "[                        Plugin ID                          ]" ); 
+		System.out.println( "[                         Plugin ID                           ]" ); 
 		Iterator<IPluginSettings> ite = _Hydra.getPluginManager().getPluginSettings();
 		
 		while( ite.hasNext() )

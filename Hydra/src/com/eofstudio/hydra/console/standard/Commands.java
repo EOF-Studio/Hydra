@@ -6,5 +6,6 @@ public enum Commands
 	plugins,
 	instances,
 	log,
-	exit
+	exit,
+	unknown
 }
