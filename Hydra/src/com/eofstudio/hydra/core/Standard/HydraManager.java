@@ -110,9 +110,8 @@ public class HydraManager implements IHydraManager, Observer
 			// TODO Actual exception handling
 			HydraLog.Log.error( e.getMessage() );
 		} 
-		catch (IOException e) 
+		catch( IOException e ) 
 		{
-			// TODO Auto-generated catch block
 			HydraLog.Log.error( e.getMessage() );
 		}
 	}
