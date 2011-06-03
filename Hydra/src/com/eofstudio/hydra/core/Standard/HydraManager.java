@@ -133,6 +133,6 @@ public class HydraManager implements IHydraManager, Observer
 		
 		_PluginManager.getPluginInstance( packet.getInstanceID() ).addConnection( packet );
 		
-		HydraLog.Log.info( String.format( "Connection established to (%s)", packet.getInstanceID() ));
+		HydraLog.Log.info( String.format( "Connection established to instance %s", Long.toHexString( packet.getInstanceID() ) ));
 	}
 }

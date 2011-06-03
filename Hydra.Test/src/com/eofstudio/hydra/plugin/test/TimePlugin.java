@@ -3,6 +3,7 @@ package com.eofstudio.hydra.plugin.test;
 import java.io.IOException;
 import java.util.Calendar;
 
+import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.hydra.commons.plugin.APlugin;
 
 public class TimePlugin extends APlugin 
@@ -34,7 +35,11 @@ public class TimePlugin extends APlugin
 						getActiveConnections().get( i ).getSocket().getInputStream().read( buffer );
 						
 						if( buffer[0] != 0x01 )
+						{
+							HydraLog.Log.debug(String.format("buffer length", buffer.length));
+							
 							return;
+						}
 						
 						SendResponse( getActiveConnections().get( i ).getSocket(), Calendar.getInstance().getTime().toString().getBytes() );
 						return;

@@ -120,12 +120,12 @@ public class TimePluginTest extends TestCase
 		
 		try 
 		{
-			manager = new HydraManager( true );
+			//manager = new HydraManager( true );
 
-			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
+			//manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
 			
 			// send test data
-			Socket socket = new Socket( "localhost", 1337 );
+			Socket socket = new Socket( "localhost", 12345 );
 			socket.getOutputStream().write( getHydraPacketData() );
 			
 			int retries = 40;
@@ -171,7 +171,7 @@ public class TimePluginTest extends TestCase
 				}
 			}
 			
-			instanceID =  LongConverter.fromByteArray( data, 0 );		
+			instanceID = LongConverter.fromByteArray( data, 0 );		
 
 			assertTrue( data.length > 8 );
 			assertTrue( instanceID != Long.MIN_VALUE );
@@ -182,18 +182,18 @@ public class TimePluginTest extends TestCase
 			
 			assertTrue(false);
 		} 
-		catch( ClassNotFoundException e ) 
-		{
-			e.printStackTrace();
-			
-			assertTrue(false);
-		} 
-		catch( ClassNotAHydraPluginException e ) 
-		{
-			e.printStackTrace();
-			
-			manager.stop(true);
-		}
+//		catch( ClassNotFoundException e ) 
+//		{
+//			e.printStackTrace();
+//			
+//			assertTrue(false);
+//		} 
+//		catch( ClassNotAHydraPluginException e ) 
+//		{
+//			e.printStackTrace();
+//			
+//			manager.stop(true);
+//		}
 		catch( InterruptedException e ) 
 		{
 			e.printStackTrace();

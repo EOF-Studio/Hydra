@@ -98,8 +98,7 @@ public class ConnectionHandler extends Observable implements IConnectionHandler,
 				}
 				catch( InvalidHydraPacketException e )
 				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					HydraLog.Log.error( e.getMessage() );
 				}
 			}
 			

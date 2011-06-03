@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
 public abstract class APlugin implements IPlugin
@@ -58,17 +59,17 @@ public abstract class APlugin implements IPlugin
 		// TODO: Implement the protocol header format, with commandID
 		try 
 		{
+			HydraLog.Log.debug(String.format("SendResponse - %s", new String(data)));
 			socket.getOutputStream().write( data );
 		} 
 		catch( IOException e ) 
 		{
-			// TODO Handle lost connections
-			e.printStackTrace();
+			HydraLog.Log.error(String.format("Couldn't send response, exception: %s", e.getMessage()));
 		}
 	}
-	
+
 	public String toString()
 	{
-		return String.format( " %12s %60s %16d", Long.toHexString( getInstanceID() ), getClass().getName(), getActiveConnections().size() ); 
+		return String.format( "  %16s %60s %15d", Long.toHexString( getInstanceID() ), getClass().getName(), getActiveConnections().size() ); 
 	}
 }

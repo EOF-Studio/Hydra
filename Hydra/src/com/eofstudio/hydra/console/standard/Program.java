@@ -45,7 +45,7 @@ public class Program extends AProgram
 		
 		program._Hydra.start( port, 50 );
 		try {
-			program._Hydra.getPluginManager().loadPlugin( new URL("file:../lib/Hydra.Test.jar"), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
+			program._Hydra.getPluginManager().loadPlugin( new URL("file:hydra_lib/Hydra.Test.jar"), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,9 +126,11 @@ public class Program extends AProgram
 	{
 		System.out.println( "[   Instance ID    |                             Name                           | # Connections ]" );
 
-		while( _Hydra.getPluginManager().getPluginInstance().hasNext() )
+		Iterator<IPlugin> ite = _Hydra.getPluginManager().getPluginInstance();
+		
+		while( ite.hasNext() )
 		{
-			IPlugin instance = _Hydra.getPluginManager().getPluginInstance().next();
+			IPlugin instance = ite.next();
 			
 			System.out.println( instance.toString() );
 		}
