@@ -236,7 +236,7 @@ public class Program extends AProgram
 	private void drawMenu()
 	{
 		System.out.println( "menu:\t\t\t\tPrints the menu." );
-		System.out.println( "plugin:\t\t\tOutputs a list of the installed plugins." );
+		System.out.println( "plugin:\t\t\t\tOutputs a list of the installed plugins." );
 		System.out.println( "instance:\t\t\tOutput a list of the current instances" );
 		System.out.println( "log (error|info|debug|off):\tOutput logging information based on the log level, default is 'error'" );
 		System.out.println( "exit:\t\t\t\tExit Hydra" );

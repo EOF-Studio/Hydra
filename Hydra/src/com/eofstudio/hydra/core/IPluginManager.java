@@ -14,8 +14,8 @@ public interface IPluginManager
 	IPluginSettings getPluginSettings( String pluginID );
 	IPlugin getPluginInstance( long instanceID );
 	Iterator<IPluginSettings> getPluginSettings();
-	Iterator<IPlugin> getPluginInstance(  );
-	
+	Iterator<IPluginPool> getPluginPools();
+
 	/**
 	 * Loads all IPlugins from the Jar file
 	 * @param path is path to the Jar file to look through

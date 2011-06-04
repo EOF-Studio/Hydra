@@ -1,6 +1,7 @@
 package com.eofstudio.hydra.core.Standard;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,8 +22,8 @@ import com.eofstudio.hydra.core.*;
  */
 public class HydraManager implements IHydraManager, Observer
 {
-	private IPluginManager  _PluginManager  = new PluginManager();
-	private ISocketListener _SocketListener = new SocketListener();
+	private IPluginManager         _PluginManager  = new PluginManager();
+	private ISocketListener        _SocketListener = new SocketListener();
 	//private String          _PluginFolder   = "plugins/";
 	
 	public boolean getIsRunning() { return _SocketListener.getIsRunning();	}
@@ -119,7 +120,7 @@ public class HydraManager implements IHydraManager, Observer
 	private void PassPacketToNewOrAvailablePluginInstance( IHydraPacket packet ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException 
 	{
 		IPluginSettings   settings = _PluginManager.getPluginSettings( packet.getPluginID() );
-		Iterator<IPlugin> iterator = getPluginManager().getPluginInstance();
+		Iterator<IPlugin> iterator = getPluginManager().;
 		
 		long instanceID = Long.MIN_VALUE;
 		
@@ -136,10 +137,17 @@ public class HydraManager implements IHydraManager, Observer
 			instanceID = plugin.getInstanceID();
 		}
 		
-		// TODO: Implement Execution slots akin those in Octopus.Net
-		
-		packet.setInstanceID( instanceID == Long.MIN_VALUE ? getPluginManager().instanciatePlugin( settings ) : instanceID );
-		PassConnectionToInstance( packet );
+		for( IPluginPool pool : _PluginPools ) 
+		{
+			if( !pool.getDefinitions().contains( packet.getPluginID() ) )
+				continue;
+			
+			if( pool.getMaxSimultaniousInstances() <= pool.getInstances().size() )
+				continue;
+			
+			packet.setInstanceID( instanceID == Long.MIN_VALUE ? getPluginManager().instanciatePlugin( settings ) : instanceID );
+			PassConnectionToInstance( packet );
+		}
 	}
 	
 	private void PassConnectionToInstance( IHydraPacket packet ) throws IOException 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,11 +15,12 @@ import com.eofstudio.hydra.commons.plugin.IPlugin;
 import com.eofstudio.hydra.commons.plugin.IPluginSettings;
 import com.eofstudio.hydra.commons.plugin.standard.PluginSettings;
 import com.eofstudio.hydra.core.IPluginManager;
+import com.eofstudio.hydra.core.IPluginPool;
 
 public class PluginManager implements IPluginManager
 {
 	private Map<String,IPluginSettings> _InstalledPlugins = new HashMap<String, IPluginSettings>();
-	private Map<Long,IPlugin>           _PluginInstances  = new HashMap<Long, IPlugin>();
+	private ArrayList<IPluginPool>      _PluginPools      = new ArrayList<IPluginPool>();
 	
 	@Override
 	public IPluginSettings getPluginSettings( String pluginID )
@@ -29,7 +31,23 @@ public class PluginManager implements IPluginManager
 	@Override
 	public IPlugin getPluginInstance( long instanceID )
 	{
-		return _PluginInstances.get( instanceID );
+		for( IPluginPool pool : _PluginPools ) 
+		{
+			IPlugin plugin = pool.getInstance( instanceID );
+			
+			if( plugin == null )
+				continue;
+			
+			return plugin;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public Iterator<IPluginPool> getPluginPools() 
+	{
+		return _PluginPools.iterator();
 	}
 	
 	@Override
@@ -38,12 +56,6 @@ public class PluginManager implements IPluginManager
 		return _InstalledPlugins.values().iterator();
 	}
 
-	@Override
-	public Iterator<IPlugin> getPluginInstance() 
-	{
-		return _PluginInstances.values().iterator();
-	}
-	
 	@Override
 	public void loadPlugin( URL path, String classname, String pluginID, int maxConnections ) throws ClassNotFoundException, ClassNotAHydraPluginException, FileNotFoundException
 	{
@@ -61,8 +73,7 @@ public class PluginManager implements IPluginManager
 	{
 		if( !classIsPlugin( plugin ) )
 			throw new ClassNotAHydraPluginException( String.format( "%1s isn't a valid hydra plugin", plugin.getName() ) );
-		
-		// TODO: Add more settings to the plugin, how many are allowed to run at one time, etc.
+
 		_InstalledPlugins.put( pluginID, new PluginSettings( plugin, pluginID, maxConnections ) );
 	}
 	

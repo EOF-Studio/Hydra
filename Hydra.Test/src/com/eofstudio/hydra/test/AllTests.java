@@ -18,6 +18,7 @@ public class AllTests {
 		suite.addTestSuite( PluginSettingsTest.class );
 		suite.addTestSuite( TimePluginTest.class );
 		suite.addTestSuite( APluginTest.class );
+		suite.addTestSuite( PluginPoolTest.class );
 		
 		//$JUnit-END$
 		return suite;
