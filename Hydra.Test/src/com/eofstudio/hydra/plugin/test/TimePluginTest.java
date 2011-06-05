@@ -7,7 +7,9 @@ import java.net.URL;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.core.IHydraManager;
+import com.eofstudio.hydra.core.IPluginPool;
 import com.eofstudio.hydra.core.Standard.HydraManager;
+import com.eofstudio.hydra.core.Standard.PluginPool;
 import com.eofstudio.utils.conversion.byteArray.IntConverter;
 import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
@@ -123,6 +125,11 @@ public class TimePluginTest extends TestCase
 			manager = new HydraManager( true );
 
 			manager.getPluginManager().loadPlugin( new URL( "file:../lib/Hydra.Test.jar" ), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin", 1 );
+			
+			IPluginPool pool = new PluginPool(1);
+			pool.registerPluginDefinition( manager.getPluginManager().getPluginSettings( "com.eofstudio.hydra.plugin.test.TimePlugin" ) );
+			
+			manager.getPluginManager().AddPluginPool( pool );
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );

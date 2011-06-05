@@ -33,14 +33,5 @@ public interface IPluginManager
 	 * @throws ClassNotAHydraPluginException
 	 */
 	void loadPlugin( Class<?> plugin, String pluginID, int maxConnections ) throws ClassNotAHydraPluginException;
-	
-	/**
-	 * Instanciate a plugin from plugin settings
-	 * @param settings
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 */
-	long instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException;
+	void AddPluginPool(IPluginPool pool);
 }

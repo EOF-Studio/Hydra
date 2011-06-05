@@ -18,6 +18,7 @@ import com.eofstudio.hydra.console.AProgram;
 import com.eofstudio.hydra.console.IKeyValuesPair;
 import com.eofstudio.hydra.console.InputParameters;
 import com.eofstudio.hydra.core.IHydraManager;
+import com.eofstudio.hydra.core.IPluginPool;
 import com.eofstudio.hydra.core.Standard.HydraManager;
 
 public class Program extends AProgram
@@ -181,14 +182,17 @@ public class Program extends AProgram
 	private void showInstances() 
 	{
 		System.out.println( "[   Instance ID    |                             Name                           | # Connections | Max Connections ]" );
-
-		Iterator<IPlugin> ite = _Hydra.getPluginManager().getPluginInstance();
+		
+		Iterator<IPluginPool> ite = _Hydra.getPluginManager().getPluginPools();
 		
 		while( ite.hasNext() )
 		{
-			IPlugin instance = ite.next();
+			IPluginPool pool = ite.next();
 			
-			System.out.println( instance.toString() );
+			for( IPlugin plugin : pool.getInstances() )
+			{
+				System.out.println( plugin.toString() );
+			}
 		}
 	}
 

@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
-import com.eofstudio.hydra.commons.plugin.APlugin;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
 import com.eofstudio.hydra.commons.plugin.IPluginSettings;
 import com.eofstudio.hydra.commons.plugin.standard.PluginSettings;
@@ -104,17 +103,8 @@ public class PluginManager implements IPluginManager
 	}
 
 	@Override
-	public long instanciatePlugin( IPluginSettings settings ) throws ClassNotFoundException, InstantiationException, IllegalAccessException
+	public void AddPluginPool(IPluginPool pool) 
 	{
-		APlugin plugin = (APlugin) settings.getClassDefinition().newInstance();
-		
-		plugin.setSettings( settings );
-		
-		synchronized( _PluginInstances ) 
-		{
-			_PluginInstances.put( plugin.getInstanceID(), plugin );
-		}
-		
-		return plugin.getInstanceID();
+		_PluginPools.add( pool );
 	}
 }

@@ -11,7 +11,7 @@ public class PluginPoolTest extends TestCase
 	{
 		IPluginPool pool = new PluginPool( 25 );
 		
-		assertTrue( pool.getDefinitions() != null );
+		assertTrue( pool.getInstances() != null );
 		assertEquals( 25, pool.getMaxSimultaniousInstances() );
 	}
 }

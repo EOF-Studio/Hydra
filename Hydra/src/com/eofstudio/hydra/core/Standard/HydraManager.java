@@ -1,7 +1,6 @@
 package com.eofstudio.hydra.core.Standard;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -119,35 +118,24 @@ public class HydraManager implements IHydraManager, Observer
 	
 	private void PassPacketToNewOrAvailablePluginInstance( IHydraPacket packet ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException 
 	{
-		IPluginSettings   settings = _PluginManager.getPluginSettings( packet.getPluginID() );
-		Iterator<IPlugin> iterator = getPluginManager().;
-		
-		long instanceID = Long.MIN_VALUE;
-		
+		IPluginSettings       settings = _PluginManager.getPluginSettings( packet.getPluginID() );
+		Iterator<IPluginPool> iterator = getPluginManager().getPluginPools();
+
 		while( iterator.hasNext() )
 		{
-			IPlugin plugin = iterator.next();
+			IPluginPool pool = iterator.next();
 			
-			if( !plugin.getPluginID().equals( packet.getPluginID() ) )
-				continue;
-			
-			if( plugin.getSettings().getMaxConnections() <= plugin.getCurrentConnections() )
-				continue;
-			
-			instanceID = plugin.getInstanceID();
-		}
-		
-		for( IPluginPool pool : _PluginPools ) 
-		{
-			if( !pool.getDefinitions().contains( packet.getPluginID() ) )
+			if( !pool.containsPluginDefinition( packet.getPluginID() ) )
 				continue;
 			
 			if( pool.getMaxSimultaniousInstances() <= pool.getInstances().size() )
 				continue;
 			
-			packet.setInstanceID( instanceID == Long.MIN_VALUE ? getPluginManager().instanciatePlugin( settings ) : instanceID );
+			packet.setInstanceID( pool.instanciatePlugin( settings.getClassDefinition().getName() ) );
 			PassConnectionToInstance( packet );
 		}
+		
+		// TODO: Notify client if there are no available plugins slots in any plugin pools
 	}
 	
 	private void PassConnectionToInstance( IHydraPacket packet ) throws IOException 
@@ -156,7 +144,10 @@ public class HydraManager implements IHydraManager, Observer
 		
 		// TODO: Proper exception handling
 		if( plugin == null )
-			return;
+			return; // TODO: Notify client if the instance doesn't exist
+		
+		if( !plugin.getPluginID().equals( packet.getPluginID() ) )
+			return; // TODO: Notify client if the instance doesn't match the provided plugin ID
 		
 		if( plugin.getSettings().getMaxConnections() <= plugin.getCurrentConnections() )
 			return; // TODO: Notify client that the max connections has been reached
