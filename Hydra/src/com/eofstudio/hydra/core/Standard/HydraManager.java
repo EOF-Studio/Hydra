@@ -1,7 +1,6 @@
 package com.eofstudio.hydra.core.Standard;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -119,12 +118,9 @@ public class HydraManager implements IHydraManager, Observer
 	private void PassPacketToNewOrAvailablePluginInstance( IHydraPacket packet ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException 
 	{
 		IPluginSettings       settings = _PluginManager.getPluginSettings( packet.getPluginID() );
-		Iterator<IPluginPool> iterator = getPluginManager().getPluginPools();
 
-		while( iterator.hasNext() )
+		for( IPluginPool pool : getPluginManager().getPluginPools() )
 		{
-			IPluginPool pool = iterator.next();
-			
 			if( !pool.containsPluginDefinition( packet.getPluginID() ) )
 				continue;
 			

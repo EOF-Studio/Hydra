@@ -7,5 +7,6 @@ public enum Commands
 	instance,
 	log,
 	exit,
+	pool,
 	unknown
 }

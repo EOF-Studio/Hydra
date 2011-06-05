@@ -39,6 +39,12 @@ public class PluginPool implements IPluginPool
 	}
 
 	@Override
+	public Collection<IPluginSettings> getRegisteredDefinition() 
+	{
+		return _RegisteredPluginSettings.values();
+	}
+	
+	@Override
 	public Collection<IPlugin> getInstances() 
 	{
 		return _Instances.values();

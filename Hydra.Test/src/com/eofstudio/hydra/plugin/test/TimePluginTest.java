@@ -129,7 +129,7 @@ public class TimePluginTest extends TestCase
 			IPluginPool pool = new PluginPool(1);
 			pool.registerPluginDefinition( manager.getPluginManager().getPluginSettings( "com.eofstudio.hydra.plugin.test.TimePlugin" ) );
 			
-			manager.getPluginManager().AddPluginPool( pool );
+			manager.getPluginManager().getPluginPools().add(pool);
 			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );

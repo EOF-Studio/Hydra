@@ -7,6 +7,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
@@ -44,9 +45,9 @@ public class PluginManager implements IPluginManager
 	}
 	
 	@Override
-	public Iterator<IPluginPool> getPluginPools() 
+	public List<IPluginPool> getPluginPools() 
 	{
-		return _PluginPools.iterator();
+		return _PluginPools;
 	}
 	
 	@Override
@@ -100,11 +101,5 @@ public class PluginManager implements IPluginManager
 			return true;
 		else
 			return classIsPlugin( (Class<?>) clazz.getGenericSuperclass() );
-	}
-
-	@Override
-	public void AddPluginPool(IPluginPool pool) 
-	{
-		_PluginPools.add( pool );
 	}
 }

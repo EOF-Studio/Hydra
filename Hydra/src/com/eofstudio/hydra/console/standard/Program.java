@@ -20,6 +20,7 @@ import com.eofstudio.hydra.console.InputParameters;
 import com.eofstudio.hydra.core.IHydraManager;
 import com.eofstudio.hydra.core.IPluginPool;
 import com.eofstudio.hydra.core.Standard.HydraManager;
+import com.eofstudio.hydra.core.Standard.PluginPool;
 
 public class Program extends AProgram
 {
@@ -47,15 +48,6 @@ public class Program extends AProgram
 		}
 		
 		program._Hydra.start( port, 50 );
-//		try {
-//			program._Hydra.getPluginManager().loadPlugin( new URL("file:../lib/Hydra.Test.jar"), "com.eofstudio.hydra.plugin.test.TimePlugin", "com.eofstudio.hydra.plugin.test.TimePlugin" );
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotAHydraPluginException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 		program.menuLoop();
 		
@@ -84,6 +76,9 @@ public class Program extends AProgram
 				case log:
 					changeLogLevel( command );
 					break;
+				case pool:
+					handlePool( command );
+					break;
 				case exit:
 					exit();
 					break;
@@ -95,6 +90,79 @@ public class Program extends AProgram
 			}
 			
 		}
+	}
+
+	private void handlePool( Command command )
+	{
+		if( command.getValue()  == null || command.getValue().length == 0 )
+			showPoolCommands();
+		else
+		if( command.getValue()[0].equals( "-ls" ) )
+			showPools();
+		else
+		if( command.getValue()[0].equals( "-c" ) )
+			createPluginPool( command );
+		else
+		if( command.getValue()[0].equals( "-a" ) )
+			addToPluginPool( command );
+		else
+			showPoolCommands();
+	}
+
+	private void addToPluginPool( Command command ) 
+	{
+		if( command.getValue().length == 3 ) 
+		{
+			IPluginSettings settings = _Hydra.getPluginManager().getPluginSettings( command.getValue()[1].replace( "\"", "" ) );
+			
+			_Hydra.getPluginManager().getPluginPools().get( new Integer( command.getValue()[2] ) ).registerPluginDefinition( settings );
+			
+			System.out.printf( "Plugin '%s' has been registered on plugin pool with index %s%n", command.getValue()[1], command.getValue()[2] );
+		}
+		else
+			showPoolCommands();
+	}
+
+	private void createPluginPool( Command command ) 
+	{
+		if( command.getValue().length == 2 ) 
+		{
+			IPluginPool pool = new PluginPool( new Integer( command.getValue()[1] ) );
+			
+			_Hydra.getPluginManager().getPluginPools().add( pool );
+			
+			System.out.println( "Created a plugin pool." );
+		}
+		else
+			showPoolCommands();
+	}
+
+	private void showPools() 
+	{
+		System.out.printf( "[ %9s | %13s | %60s ]%n", "Index", "Max Instances", "Registered Plugins" );
+		
+		for( int i = 0; i < _Hydra.getPluginManager().getPluginPools().size(); i++ )
+		{
+			IPluginPool pool = _Hydra.getPluginManager().getPluginPools().get( i );
+			
+			System.out.printf( "  %9d   %13s   ", i, pool.getMaxSimultaniousInstances() );
+			
+			for( IPluginSettings settings : pool.getRegisteredDefinition() )
+			{
+				System.out.printf( "%60s%n", settings.getPluginID() );
+			}
+			
+			if( pool.getRegisteredDefinition().size() == 0 )
+				System.out.println();
+		}
+	}
+
+	private void showPoolCommands() 
+	{
+		System.out.println( "The pool command take the forllowing parameters" );
+		System.out.println( "-ls: will list all the pool " );
+		System.out.println( "-c number_of_simultanious_executions : this will create a new plugin pool" );
+		System.out.println( "-a PluginID number_of_simultanious_executions : this will create a new plugin pool" );
 	}
 
 	private void handlePlugin( Command command ) 
@@ -113,7 +181,7 @@ public class Program extends AProgram
 
 	private void showPluginCommands() 
 	{
-		System.out.println( "The load command take the forllowing parameters" );
+		System.out.println( "The plugin command take the forllowing parameters" );
 		System.out.println( "-ls: will list all the loaded plugins " );
 		System.out.println( "-p \"path/to/file\" \"classpath\" max_number_of_connections : this will load a plugin" );
 	}
@@ -183,12 +251,8 @@ public class Program extends AProgram
 	{
 		System.out.println( "[   Instance ID    |                             Name                           | # Connections | Max Connections ]" );
 		
-		Iterator<IPluginPool> ite = _Hydra.getPluginManager().getPluginPools();
-		
-		while( ite.hasNext() )
+		for( IPluginPool pool : _Hydra.getPluginManager().getPluginPools() )
 		{
-			IPluginPool pool = ite.next();
-			
 			for( IPlugin plugin : pool.getInstances() )
 			{
 				System.out.println( plugin.toString() );
@@ -240,7 +304,8 @@ public class Program extends AProgram
 	private void drawMenu()
 	{
 		System.out.println( "menu:\t\t\t\tPrints the menu." );
-		System.out.println( "plugin:\t\t\t\tOutputs a list of the installed plugins." );
+		System.out.println( "plugin:\t\t\t\tOutputs a list of plugin commands." );
+		System.out.println( "pool:\t\t\t\tOutput list of plugin pool commands." );
 		System.out.println( "instance:\t\t\tOutput a list of the current instances" );
 		System.out.println( "log (error|info|debug|off):\tOutput logging information based on the log level, default is 'error'" );
 		System.out.println( "exit:\t\t\t\tExit Hydra" );

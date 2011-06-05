@@ -22,4 +22,5 @@ public interface IPluginPool
 	 * @throws IllegalAccessException
 	 */
 	long instanciatePlugin( String classname ) throws ClassNotFoundException, InstantiationException, IllegalAccessException;
+	Collection<IPluginSettings> getRegisteredDefinition();
 }

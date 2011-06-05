@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 
 import com.eofstudio.hydra.commons.exceptions.ClassNotAHydraPluginException;
 import com.eofstudio.hydra.commons.plugin.IPlugin;
@@ -14,7 +15,7 @@ public interface IPluginManager
 	IPluginSettings getPluginSettings( String pluginID );
 	IPlugin getPluginInstance( long instanceID );
 	Iterator<IPluginSettings> getPluginSettings();
-	Iterator<IPluginPool> getPluginPools();
+	List<IPluginPool> getPluginPools();
 
 	/**
 	 * Loads all IPlugins from the Jar file
@@ -33,5 +34,4 @@ public interface IPluginManager
 	 * @throws ClassNotAHydraPluginException
 	 */
 	void loadPlugin( Class<?> plugin, String pluginID, int maxConnections ) throws ClassNotAHydraPluginException;
-	void AddPluginPool(IPluginPool pool);
 }
