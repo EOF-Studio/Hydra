@@ -5,7 +5,7 @@ import com.eofstudio.hydra.commons.plugin.APlugin;
 public class MockPlugin extends APlugin 
 {
 	@Override
-	public void run() 
+	public void doWork() 
 	{
 	}
 

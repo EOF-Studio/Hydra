@@ -25,6 +25,20 @@ public abstract class APlugin implements IPlugin
 		_Thread.start();
 	}
 	
+	@Override
+	public void run() 
+	{
+		try
+		{
+			doWork();
+		}
+		catch( Exception e )
+		{
+			// TODO: Error handling, general error from plugin
+			return;
+		}
+	}
+	
 	protected ArrayList<IHydraPacket> getActiveConnections()
 	{
 		return _ActiveConnections;
@@ -32,11 +46,6 @@ public abstract class APlugin implements IPlugin
 	
 	@Override
 	public int getCurrentConnections() 
-	{
-		return _ActiveConnections.size();
-	}
-	
-	int getNoOfCurrentConnections()
 	{
 		return _ActiveConnections.size();
 	}
@@ -82,7 +91,6 @@ public abstract class APlugin implements IPlugin
 		// TODO: Implement the protocol header format, with commandID
 		try 
 		{
-			HydraLog.Log.debug(String.format("SendResponse - %s", new String(data)));
 			socket.getOutputStream().write( data );
 		} 
 		catch( IOException e ) 

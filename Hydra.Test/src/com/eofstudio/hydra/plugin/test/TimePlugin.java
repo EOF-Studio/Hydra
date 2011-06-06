@@ -1,6 +1,5 @@
 package com.eofstudio.hydra.plugin.test;
 
-import java.io.IOException;
 import java.util.Calendar;
 
 import com.eofstudio.hydra.commons.logging.HydraLog;
@@ -9,9 +8,9 @@ import com.eofstudio.hydra.commons.plugin.APlugin;
 public class TimePlugin extends APlugin 
 {	
 	@Override
-	public void run() 
+	public void doWork() throws Exception 
 	{
-		while( true )
+		while( true ) 
 		{
 			try 
 			{
@@ -50,11 +49,6 @@ public class TimePlugin extends APlugin
 			{
 				// This Interrupt is allowed
 			} 
-			catch( IOException e) 
-			{
-				// TODO Add code to handle lost connections
-				e.printStackTrace();
-			}
 		}
 	}
 }

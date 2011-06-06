@@ -10,4 +10,5 @@ public interface IPlugin extends Runnable
 	void addConnection( IHydraPacket packet ) throws IOException;
 	int getCurrentConnections();
 	Thread getThread();
+	void doWork() throws Exception;
 }
