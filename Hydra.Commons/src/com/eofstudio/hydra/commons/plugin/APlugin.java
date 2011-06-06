@@ -22,7 +22,11 @@ public abstract class APlugin extends Observable implements IPlugin
 		_ActiveConnections = new ArrayList<IHydraPacket>();
 		_Thread            = new Thread( this );
 		_InstanceID        = new Random().nextLong();
-		
+	}
+	
+	@Override
+	public void start()
+	{
 		_Thread.start();
 	}
 	

@@ -72,6 +72,8 @@ public class PluginPool implements IPluginPool, Observer
 			_Instances.put( plugin.getInstanceID() , plugin);
 		}
 		
+		plugin.start();
+		
 		return plugin.getInstanceID();
 	}
 

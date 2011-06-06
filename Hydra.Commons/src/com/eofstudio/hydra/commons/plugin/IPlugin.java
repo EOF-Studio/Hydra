@@ -11,4 +11,5 @@ public interface IPlugin extends Runnable
 	int getCurrentConnections();
 	Thread getThread();
 	void doWork() throws Exception;
+	void start();
 }
