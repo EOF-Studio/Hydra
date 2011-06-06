@@ -6,7 +6,7 @@ import com.eofstudio.hydra.commons.plugin.standard.PluginSettings;
 
 import junit.framework.TestCase;
 
-public class APluginTest extends TestCase 
+public class APluginTest extends TestCase
 {
 	public void testShouldGetToString()
 	{
@@ -22,5 +22,15 @@ public class APluginTest extends TestCase
 		
 		assertEquals( "com.eofstudio.hydra.commons.plugin.test.MockPlugin", plugin.getPluginID() );
 	}
+	
+	public void testShould_Notify_Observers_When_There_Are_No_More_Work_To_Be_Done()
+	{
+		APlugin         plugin = new MockPlugin();
+		APluginObserver obs    = new APluginObserver();
+		
+		plugin.addObserver( obs );
+		plugin.run();
+		
+		assertTrue( obs.wasUpdated );
+	}
 }
-

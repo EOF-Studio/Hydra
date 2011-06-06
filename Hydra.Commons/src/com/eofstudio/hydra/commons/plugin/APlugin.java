@@ -3,12 +3,13 @@ package com.eofstudio.hydra.commons.plugin;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
 import com.eofstudio.hydra.commons.logging.HydraLog;
 import com.eofstudio.utils.conversion.byteArray.LongConverter;
 
-public abstract class APlugin implements IPlugin
+public abstract class APlugin extends Observable implements IPlugin
 {
 	private ArrayList<IHydraPacket> _ActiveConnections;
 	private long                    _InstanceID;
@@ -36,6 +37,11 @@ public abstract class APlugin implements IPlugin
 		{
 			// TODO: Error handling, general error from plugin
 			return;
+		}
+		finally
+		{
+			setChanged();
+			notifyObservers();
 		}
 	}
 	
