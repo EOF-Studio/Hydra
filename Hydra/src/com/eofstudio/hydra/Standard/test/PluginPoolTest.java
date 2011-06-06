@@ -46,8 +46,5 @@ public class PluginPoolTest extends TestCase
 		catch (IllegalAccessException e) {
 			assertTrue(false);
 		}
-		
-		
-		
 	}
 }
