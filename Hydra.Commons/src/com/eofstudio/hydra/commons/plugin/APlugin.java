@@ -111,6 +111,6 @@ public abstract class APlugin extends Observable implements IPlugin
 
 	public String toString()
 	{
-		return String.format( "  %16s %60s %15d %15d", Long.toHexString( getInstanceID() ), getClass().getName(), getActiveConnections().size(), getSettings().getMaxConnections() ); 
+		return String.format( "  %16s %60s %15d   %15d", Long.toHexString( getInstanceID() ), getClass().getName(), getActiveConnections().size(), getSettings().getMaxConnections() ); 
 	}
 }

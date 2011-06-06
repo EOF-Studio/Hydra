@@ -84,7 +84,7 @@ public class PluginManager implements IPluginManager
 	 */
 	private boolean classIsPlugin( Class<?> clazz ) 
 	{
-		// TODO: Refactor and see if there is a better way of checking if it implements the Interface or Abstract class
+		// TODO: See if there is a better way of doing this
 		if( clazz.getGenericSuperclass() == null )
 			return false;
 		

@@ -130,7 +130,7 @@ public class TimePluginTest extends TestCase
 			pool.registerPluginDefinition( manager.getPluginManager().getPluginSettings( "com.eofstudio.hydra.plugin.test.TimePlugin" ) );
 			
 			manager.getPluginManager().getPluginPools().add(pool);
-			
+//			
 			// send test data
 			Socket socket = new Socket( "localhost", 1337 );
 			socket.getOutputStream().write( getHydraPacketData() );
@@ -182,6 +182,8 @@ public class TimePluginTest extends TestCase
 
 			assertTrue( data.length > 8 );
 			assertTrue( instanceID != Long.MIN_VALUE );
+			
+			socket.close();
 		} 
 		catch( IOException e ) 
 		{
